@@ -1,0 +1,23 @@
+import cv2
+import mediapipe as mp
+import pyautogui
+import numpy as np
+import time
+import math
+
+# Mediapipe hands
+mp_hands = mp.solutions.hands # type: ignore
+hands = mp_hands.Hands(max_num_hands=1)
+mp_draw = mp.solutions.drawing_utils # type: ignore
+
+# Screen size
+screen_w, screen_h = pyautogui.size()
+
+# Cursor smoothing
+prev_x, prev_y = 0, 0
+smooth_factor = 0.15  # exponential smoothing factor
+prediction_factor = 0.3  # how much to predict ahead
+
+# Click cooldown
+click_cooldown = 0.5
+last_click_time = 0
