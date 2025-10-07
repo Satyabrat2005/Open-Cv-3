@@ -35,8 +35,8 @@ velocity_x, velocity_y = 0, 0
 
 # Scroll tracking
 prev_scroll_y = None
-scroll_sensitivity = 1.2   # increase for faster scrolling
-scroll_cooldown = 0.05     # 50 ms between scroll updates
+scroll_sensitivity = 1.2   
+scroll_cooldown = 0.05  
 last_scroll_time = 0
 
 
@@ -77,9 +77,9 @@ while True:
                 current_time = time.time()
 
                 # Draw blue dots on index, middle, and ring fingertips
-                cv2.circle(frame, lm_list[8], 15, (255, 0, 0), cv2.FILLED)   # Index fingertip
-                cv2.circle(frame, lm_list[12], 15, (255, 0, 0), cv2.FILLED)  # Middle fingertip
-                cv2.circle(frame, lm_list[16], 15, (255, 0, 0), cv2.FILLED)  # Ring fingertip
+                cv2.circle(frame, lm_list[8], 15, (255, 0, 0), cv2.FILLED)  
+                cv2.circle(frame, lm_list[12], 15, (255, 0, 0), cv2.FILLED)  
+                cv2.circle(frame, lm_list[16], 15, (255, 0, 0), cv2.FILLED)  
 
                 # Display scroll mode text
                 cv2.putText(frame, "SCROLL MODE", (10, 60),
