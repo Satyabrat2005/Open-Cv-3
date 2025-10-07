@@ -39,6 +39,11 @@ scroll_sensitivity = 1.2
 scroll_cooldown = 0.05
 last_scroll_time = 0
 
+# Multitasking mode
+multitask_cooldown = 2.5  # avoid retriggering instantly
+last_multitask_time = 0
+multitask_active = False
+
 
 def fingers_up(lm_list):
     """Return list of boolean for [thumb, index, middle, ring, pinky] if finger is up."""
@@ -47,14 +52,13 @@ def fingers_up(lm_list):
     # Thumb – check x direction
     fingers.append(lm_list[4][0] > lm_list[3][0])
 
-    # Other fingers – check if tip is much higher (Y smaller) than pip joint
+    # Other fingers – require fully extended posture
     for tip, pip, mcp in [(8, 6, 5), (12, 10, 9), (16, 14, 13), (20, 18, 17)]:
         tip_y, pip_y, mcp_y = lm_list[tip][1], lm_list[pip][1], lm_list[mcp][1]
         if (mcp_y - tip_y) > 40 and (pip_y - tip_y) > 20:
             fingers.append(True)
         else:
             fingers.append(False)
-
     return fingers
 
 
@@ -79,20 +83,38 @@ while True:
             # Detect fingers
             fingers = fingers_up(lm_list)
 
-            # --- SCROLL MODE (strict detection: 3 fingers fully extended only) ---
-            if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
-                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
-                current_time = time.time()
+            current_time = time.time()
 
-                # Draw blue dots on fingertips
+            # --- 4 FINGERS: MULTITASKING VIEW ---
+            if fingers[1] and fingers[2] and fingers[3] and fingers[4] and not fingers[0]:
+                cv2.putText(frame, "MULTITASKING MODE (4 FINGERS)", (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 100, 0), 2)
+
+                # Draw blue dots on all four fingertips
+                for tip_id in [8, 12, 16, 20]:
+                    cv2.circle(frame, lm_list[tip_id], 15, (255, 100, 0), cv2.FILLED)
+
+                # Trigger multitasking view only once per gesture
+                if current_time - last_multitask_time > multitask_cooldown:
+                    pyautogui.hotkey('win', 'tab')
+                    last_multitask_time = current_time
+                    multitask_active = True
+
+                # Let user move mouse to select window
+                # (no continue — allow cursor movement below)
+                # Don't scroll or click automatically here
+
+            # --- 3 FINGERS: SCROLL MODE ---
+            elif fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
+                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
+
+                # Draw blue dots on 3 fingertips
                 for tip_id in [8, 12, 16]:
                     cv2.circle(frame, lm_list[tip_id], 15, (255, 0, 0), cv2.FILLED)
 
-                # Display text
-                cv2.putText(frame, "SCROLL MODE (3 FULL FINGERS)", (10, 60),
+                cv2.putText(frame, "SCROLL MODE (3 FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
 
-                # Handle scrolling
                 if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
                     dy = avg_y - prev_scroll_y
                     if abs(dy) > 2:
@@ -101,12 +123,12 @@ while True:
                         last_scroll_time = current_time
 
                 prev_scroll_y = avg_y
-                continue  # Freeze cursor
+                continue  # freeze cursor
 
             else:
                 prev_scroll_y = None
 
-            # NORMAL CURSOR CONTROL
+            # --- NORMAL CURSOR CONTROL ---
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
@@ -120,17 +142,18 @@ while True:
 
             pyautogui.moveTo(prev_x, prev_y, duration=0)
 
+            # Draw pointer
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
-            # CLICK
+            # --- CLICK ---
             if fingers[1] and fingers[2] and not dragging and not fingers[3]:
                 if time.time() - last_click_time > click_cooldown:
                     pyautogui.click()
                     last_click_time = time.time()
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # DRAG
+            # --- DRAG ---
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
@@ -141,8 +164,8 @@ while True:
                     pyautogui.mouseUp()
                     dragging = False
 
-    cv2.imshow("Lag-Free Smooth Mouse + Strict Scroll Mode", frame)
-    if cv2.waitKey(1) & 0xFF == 27:
+    cv2.imshow("Gesture Mouse + Scroll + Multitasking", frame)
+    if cv2.waitKey(1) & 0xFF == 27:  # ESC to quit
         break
 
 cap.release()
