@@ -15,8 +15,8 @@ screen_w, screen_h = pyautogui.size()
 
 # Cursor smoothing
 prev_x, prev_y = 0, 0
-smooth_factor = 0.15  # exponential smoothing factor
-prediction_factor = 0.3  # how much to predict ahead
+smooth_factor = 0.15 
+prediction_factor = 0.3  
 
 # Click cooldown
 click_cooldown = 0.5
