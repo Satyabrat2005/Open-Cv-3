@@ -7,7 +7,7 @@ import math
 
 # Mediapipe hands
 mp_hands = mp.solutions.hands  # type: ignore
-hands = mp_hands.Hands(max_num_hands=1)
+hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7, min_tracking_confidence=0.6)
 mp_draw = mp.solutions.drawing_utils  # type: ignore
 
 # Screen size
@@ -35,23 +35,31 @@ velocity_x, velocity_y = 0, 0
 
 # Scroll tracking
 prev_scroll_y = None
-scroll_sensitivity = 1.2   
-scroll_cooldown = 0.05  
+scroll_sensitivity = 1.2
+scroll_cooldown = 0.05
 last_scroll_time = 0
 
 
 def fingers_up(lm_list):
+    """Return list of boolean for [thumb, index, middle, ring, pinky] if finger is up."""
     fingers = []
-    fingers.append(lm_list[4][0] > lm_list[3][0])          # Thumb
-    fingers.append(lm_list[8][1] < lm_list[6][1])          # Index
-    fingers.append(lm_list[12][1] < lm_list[10][1])        # Middle
-    fingers.append(lm_list[16][1] < lm_list[14][1])        # Ring
-    fingers.append(lm_list[20][1] < lm_list[18][1])        # Pinky
+
+    # Thumb – check x direction
+    fingers.append(lm_list[4][0] > lm_list[3][0])
+
+    # Other fingers – check if tip is much higher (Y smaller) than pip joint
+    for tip, pip, mcp in [(8, 6, 5), (12, 10, 9), (16, 14, 13), (20, 18, 17)]:
+        tip_y, pip_y, mcp_y = lm_list[tip][1], lm_list[pip][1], lm_list[mcp][1]
+        if (mcp_y - tip_y) > 40 and (pip_y - tip_y) > 20:
+            fingers.append(True)
+        else:
+            fingers.append(False)
+
     return fingers
 
 
 def distance(p1, p2):
-    return math.hypot(p1[0]-p2[0], p1[1]-p2[1])
+    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
 
 while True:
@@ -71,55 +79,47 @@ while True:
             # Detect fingers
             fingers = fingers_up(lm_list)
 
-            # --- SCROLL MODE (3 fingers up: index + middle + ring only) ---
+            # --- SCROLL MODE (strict detection: 3 fingers fully extended only) ---
             if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
-                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3  # average fingertip Y
+                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
                 current_time = time.time()
 
-                # Draw blue dots on index, middle, and ring fingertips
-                cv2.circle(frame, lm_list[8], 15, (255, 0, 0), cv2.FILLED)  
-                cv2.circle(frame, lm_list[12], 15, (255, 0, 0), cv2.FILLED)  
-                cv2.circle(frame, lm_list[16], 15, (255, 0, 0), cv2.FILLED)  
+                # Draw blue dots on fingertips
+                for tip_id in [8, 12, 16]:
+                    cv2.circle(frame, lm_list[tip_id], 15, (255, 0, 0), cv2.FILLED)
 
-                # Display scroll mode text
-                cv2.putText(frame, "SCROLL MODE", (10, 60),
+                # Display text
+                cv2.putText(frame, "SCROLL MODE (3 FULL FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
 
                 # Handle scrolling
                 if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
                     dy = avg_y - prev_scroll_y
-                    if abs(dy) > 2:  # ignore tiny noise
+                    if abs(dy) > 2:
                         scroll_amount = -int(dy * scroll_sensitivity)
                         pyautogui.scroll(scroll_amount)
                         last_scroll_time = current_time
 
                 prev_scroll_y = avg_y
-
-                # Freeze cursor movement
-                continue  # skip rest of the loop for this frame
+                continue  # Freeze cursor
 
             else:
-                prev_scroll_y = None  # reset when not scrolling
+                prev_scroll_y = None
 
             # --- NORMAL CURSOR CONTROL ---
-            # Map camera coords → screen coords
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
-            # Velocity-based smoothing
             velocity_x = velocity_x * (1 - velocity_smooth) + (target_x - prev_x) * velocity_smooth
             velocity_y = velocity_y * (1 - velocity_smooth) + (target_y - prev_y) * velocity_smooth
 
-            # Prediction & smoothing
             predicted_x = target_x + velocity_x * prediction_factor
             predicted_y = target_y + velocity_y * prediction_factor
             prev_x = prev_x + (predicted_x - prev_x) * smooth_factor
             prev_y = prev_y + (predicted_y - prev_y) * smooth_factor
 
-            # Move mouse
             pyautogui.moveTo(prev_x, prev_y, duration=0)
 
-            # Draw pointer
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
@@ -141,8 +141,8 @@ while True:
                     pyautogui.mouseUp()
                     dragging = False
 
-    cv2.imshow("Lag-Free Smooth Mouse + Scroll Mode", frame)
-    if cv2.waitKey(1) & 0xFF == 27:  # ESC to quit
+    cv2.imshow("Lag-Free Smooth Mouse + Strict Scroll Mode", frame)
+    if cv2.waitKey(1) & 0xFF == 27:
         break
 
 cap.release()
