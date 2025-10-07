@@ -45,9 +45,9 @@ def distance(p1, p2):
     return math.hypot(p1[0]-p2[0], p1[1]-p2[1])
 
 # Previous finger position for prediction
-smooth_factor = 0.3      # higher = smoother, lower = faster (0.25–0.4 recommended)
-velocity_smooth = 0.25     # helps filter jitter from small frame noise
-prediction_factor = 0.12    # small prediction to reduce micro-lag
+smooth_factor = 0.3      
+velocity_smooth = 0.25     
+prediction_factor = 0.12    
 
 prev_x, prev_y = 0, 0
 velocity_x, velocity_y = 0, 0
