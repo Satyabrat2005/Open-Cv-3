@@ -106,7 +106,7 @@ while True:
             else:
                 prev_scroll_y = None
 
-            # --- NORMAL CURSOR CONTROL ---
+            # NORMAL CURSOR CONTROL
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
@@ -123,14 +123,14 @@ while True:
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
-            # --- CLICK ---
+            # CLICK
             if fingers[1] and fingers[2] and not dragging and not fingers[3]:
                 if time.time() - last_click_time > click_cooldown:
                     pyautogui.click()
                     last_click_time = time.time()
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # --- DRAG ---
+            # DRAG
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
