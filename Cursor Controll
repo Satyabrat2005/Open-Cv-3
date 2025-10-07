@@ -35,8 +35,8 @@ velocity_x, velocity_y = 0, 0
 
 # Scroll tracking
 prev_scroll_y = None
-scroll_sensitivity = 1.2   
-scroll_cooldown = 0.05     
+scroll_sensitivity = 1.2   # increase for faster scrolling
+scroll_cooldown = 0.05     # 50 ms between scroll updates
 last_scroll_time = 0
 
 
@@ -68,6 +68,33 @@ while True:
             index_x, index_y = lm_list[8]
             thumb_x, thumb_y = lm_list[4]
 
+            # Detect fingers
+            fingers = fingers_up(lm_list)
+
+            # --- SCROLL MODE (3 fingers up: index + middle + ring only) ---
+            if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
+                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3  # average fingertip Y
+                current_time = time.time()
+
+                if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
+                    dy = avg_y - prev_scroll_y
+
+                    if abs(dy) > 2:  # ignore tiny noise
+                        scroll_amount = -int(dy * scroll_sensitivity)
+                        pyautogui.scroll(scroll_amount)
+                        last_scroll_time = current_time
+
+                prev_scroll_y = avg_y
+                cv2.putText(frame, "SCROLL MODE", (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
+
+                # STOP cursor movement while scrolling
+                continue  # skip rest of loop for this frame
+
+            else:
+                prev_scroll_y = None  # reset when not scrolling
+
+            # --- NORMAL CURSOR CONTROL ---
             # Map camera coords → screen coords
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
@@ -85,21 +112,18 @@ while True:
             # Move mouse
             pyautogui.moveTo(prev_x, prev_y, duration=0)
 
-            # Visual cursor
+            # Draw pointer
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
-            # Finger states
-            fingers = fingers_up(lm_list)
-
-            # CLICK
+            # --- CLICK ---
             if fingers[1] and fingers[2] and not dragging and not fingers[3]:
                 if time.time() - last_click_time > click_cooldown:
                     pyautogui.click()
                     last_click_time = time.time()
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # DRAG
+            # --- DRAG ---
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
@@ -110,27 +134,7 @@ while True:
                     pyautogui.mouseUp()
                     dragging = False
 
-            # SCROLL(3 fingers) 
-            if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
-                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3  # average fingertip Y
-                current_time = time.time()
-
-                if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
-                    dy = avg_y - prev_scroll_y
-
-                    # if moved up slightly → scroll down
-                    if abs(dy) > 2:  # ignore tiny noise
-                        scroll_amount = -int(dy * scroll_sensitivity)
-                        pyautogui.scroll(scroll_amount)
-                        last_scroll_time = current_time
-
-                prev_scroll_y = avg_y
-                cv2.putText(frame, "Scrolling Mode", (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
-            else:
-                prev_scroll_y = None  # reset scroll reference when not in scroll gesture
-
-    cv2.imshow("Lag-Free Smooth Mouse + Scroll", frame)
+    cv2.imshow("Lag-Free Smooth Mouse + Scroll Mode", frame)
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
