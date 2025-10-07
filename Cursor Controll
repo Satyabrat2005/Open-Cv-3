@@ -10,10 +10,9 @@ mp_hands = mp.solutions.hands # type: ignore
 hands = mp_hands.Hands(max_num_hands=1)
 mp_draw = mp.solutions.drawing_utils # type: ignore
 
-# Screen size
+
 screen_w, screen_h = pyautogui.size()
 
-# Cursor smoothing
 prev_x, prev_y = 0, 0
 smooth_factor = 0.15 
 prediction_factor = 0.3  
@@ -44,7 +43,6 @@ def fingers_up(lm_list):
 def distance(p1, p2):
     return math.hypot(p1[0]-p2[0], p1[1]-p2[1])
 
-# Previous finger position for prediction
 prev_x, prev_y = 0, 0
 velocity_x, velocity_y = 0, 0
 smooth_factor = 0.25       # controls position smoothing
