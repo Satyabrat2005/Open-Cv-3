@@ -5,6 +5,7 @@ import numpy as np
 import time
 import math
 
+# Mediapipe hands
 mp_hands = mp.solutions.hands # type: ignore
 hands = mp_hands.Hands(max_num_hands=1)
 mp_draw = mp.solutions.drawing_utils # type: ignore
@@ -43,8 +44,12 @@ def fingers_up(lm_list):
 def distance(p1, p2):
     return math.hypot(p1[0]-p2[0], p1[1]-p2[1])
 
-prev_index_x, prev_index_y = 0, 0
-prev_time = time.time()
+# Previous finger position for prediction
+prev_x, prev_y = 0, 0
+velocity_x, velocity_y = 0, 0
+smooth_factor = 0.25       # controls position smoothing
+velocity_smooth = 0.35     # controls velocity smoothing
+prediction_factor = 0.2    # reduces overshoot prediction
 
 while True:
     success, frame = cap.read()
@@ -55,47 +60,44 @@ while True:
     if result.multi_hand_landmarks:
         for handLms in result.multi_hand_landmarks:
             mp_draw.draw_landmarks(frame, handLms, mp_hands.HAND_CONNECTIONS)
-            lm_list = [(int(lm.x*wCam), int(lm.y*hCam)) for lm in handLms.landmark]
+            lm_list = [(int(lm.x * wCam), int(lm.y * hCam)) for lm in handLms.landmark]
 
             index_x, index_y = lm_list[8]
             thumb_x, thumb_y = lm_list[4]
 
-            # Predict finger movement based on velocity
-            current_time = time.time()
-            dt = current_time - prev_time
-            if dt == 0:
-                dt = 0.001
-            vel_x = (index_x - prev_index_x) / dt
-            vel_y = (index_y - prev_index_y) / dt
-            pred_index_x = index_x + vel_x * prediction_factor
-            pred_index_y = index_y + vel_y * prediction_factor
-            prev_index_x, prev_index_y = index_x, index_y
-            prev_time = current_time
+            # Predict and smooth
+            target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
+            target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
-            # Map predicted coordinates to screen
-            target_x = np.interp(pred_index_x, [frame_margin, wCam-frame_margin], [0, screen_w])
-            target_y = np.interp(pred_index_y, [frame_margin, hCam-frame_margin], [0, screen_h])
+            # Velocity-based smoothing (Kalman-style)
+            velocity_x = velocity_x * (1 - velocity_smooth) + (target_x - prev_x) * velocity_smooth
+            velocity_y = velocity_y * (1 - velocity_smooth) + (target_y - prev_y) * velocity_smooth
 
-            # Ultra-smooth exponential smoothing
-            prev_x += (target_x - prev_x) * smooth_factor
-            prev_y += (target_y - prev_y) * smooth_factor
-            pyautogui.moveTo(prev_x, prev_y)
+            # Predict ahead slightly to reduce latency
+            predicted_x = target_x + velocity_x * prediction_factor
+            predicted_y = target_y + velocity_y * prediction_factor
 
-            # Draw pointer & cursor
-            cv2.circle(frame, (index_x, index_y), 12, (255, 0, 0), cv2.FILLED)
+            # Final exponential smoothing for stability
+            prev_x = prev_x + (predicted_x - prev_x) * smooth_factor
+            prev_y = prev_y + (predicted_y - prev_y) * smooth_factor
+
+            pyautogui.moveTo(prev_x, prev_y, duration=0)  # instantaneous move (no extra lag)
+
+            # Draw indicator
+            cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
             # Fingers state
             fingers = fingers_up(lm_list)
 
-            # Selection click: index + middle fingers
+            # Click gesture (index + middle)
             if fingers[1] and fingers[2] and not dragging:
                 if time.time() - last_click_time > click_cooldown:
                     pyautogui.click()
                     last_click_time = time.time()
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # Drag & Drop: thumb + index pinch
+            # Drag gesture (thumb + index pinch)
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
@@ -106,10 +108,9 @@ while True:
                     pyautogui.mouseUp()
                     dragging = False
 
-    cv2.imshow("Ultra Smooth Predicted Mouse", frame)
+    cv2.imshow("Ultra Smooth Mouse Control", frame)
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
 cap.release()
 cv2.destroyAllWindows()
-
