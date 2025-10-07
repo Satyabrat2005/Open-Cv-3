@@ -34,11 +34,11 @@ frame_margin = 100
 
 def fingers_up(lm_list):
     fingers = []
-    fingers.append(lm_list[4][0] > lm_list[3][0])          # Thumb
-    fingers.append(lm_list[8][1] < lm_list[6][1])          # Index
-    fingers.append(lm_list[12][1] < lm_list[10][1])        # Middle
-    fingers.append(lm_list[16][1] < lm_list[14][1])        # Ring
-    fingers.append(lm_list[20][1] < lm_list[18][1])        # Pinky
+    fingers.append(lm_list[4][0] > lm_list[3][0])          
+    fingers.append(lm_list[8][1] < lm_list[6][1])         
+    fingers.append(lm_list[12][1] < lm_list[10][1])        
+    fingers.append(lm_list[16][1] < lm_list[14][1])        
+    fingers.append(lm_list[20][1] < lm_list[18][1])        
     return fingers
 
 def distance(p1, p2):
