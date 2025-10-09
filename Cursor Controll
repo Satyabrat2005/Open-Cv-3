@@ -40,7 +40,7 @@ scroll_cooldown = 0.05
 last_scroll_time = 0
 
 # Multitasking mode
-multitask_cooldown = 2.5  # avoid retriggering instantly
+multitask_cooldown = 2.5  
 last_multitask_time = 0
 multitask_active = False
 
@@ -128,7 +128,7 @@ while True:
             else:
                 prev_scroll_y = None
 
-            # --- NORMAL CURSOR CONTROL ---
+            # NORMAL CURSOR CONTROL
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
