@@ -4,8 +4,11 @@ import pyautogui
 import numpy as np
 import time
 import math
+import webbrowser
 
-# Mediapipe hands
+# -------------------------------
+# Mediapipe setup
+# -------------------------------
 mp_hands = mp.solutions.hands  # type: ignore
 hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7, min_tracking_confidence=0.6)
 mp_draw = mp.solutions.drawing_utils  # type: ignore
@@ -20,7 +23,9 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 frame_margin = 100
 
+# -------------------------------
 # Timing / click
+# -------------------------------
 click_cooldown = 0.5
 last_click_time = 0
 dragging = False
@@ -29,7 +34,6 @@ dragging = False
 smooth_factor = 0.3
 velocity_smooth = 0.25
 prediction_factor = 0.12
-
 prev_x, prev_y = 0, 0
 velocity_x, velocity_y = 0, 0
 
@@ -39,26 +43,31 @@ scroll_sensitivity = 1.2
 scroll_cooldown = 0.05
 last_scroll_time = 0
 
-# Multitasking mode
-multitask_cooldown = 2.5 
+# Multitasking
+multitask_cooldown = 2.5
 last_multitask_time = 0
 multitask_active = False
 
-# Virtual Desktop Swipe tracking
+# Virtual Desktop Swipe
 last_swipe_time = 0
 last_swipe_x = 0
-swipe_threshold = 100  
-swipe_cooldown = 1.0   # seconds between swipes
+swipe_threshold = 100
+swipe_cooldown = 1.0
 
+# -------------------------------
+# Gesture Sequence Recognition
+# -------------------------------
+trajectory = []
+MAX_TRAJECTORY = 50
+last_shape_time = 0
+shape_cooldown = 1.5  # avoid multiple triggers
 
+# -------------------------------
+# Helper functions
+# -------------------------------
 def fingers_up(lm_list):
-    """Return list of boolean for [thumb, index, middle, ring, pinky] if finger is up."""
     fingers = []
-
-    # Thumb – check x direction
     fingers.append(lm_list[4][0] > lm_list[3][0])
-
-    # Other fingers – require fully extended posture
     for tip, pip, mcp in [(8, 6, 5), (12, 10, 9), (16, 14, 13), (20, 18, 17)]:
         tip_y, pip_y, mcp_y = lm_list[tip][1], lm_list[pip][1], lm_list[mcp][1]
         if (mcp_y - tip_y) > 40 and (pip_y - tip_y) > 20:
@@ -67,11 +76,34 @@ def fingers_up(lm_list):
             fingers.append(False)
     return fingers
 
-
 def distance(p1, p2):
     return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
+def recognize_shape(traj):
+    if len(traj) < 10:
+        return None
+    x_vals = [p[0] for p in traj]
+    y_vals = [p[1] for p in traj]
+    min_x, max_x = min(x_vals), max(x_vals)
+    min_y, max_y = min(y_vals), max(y_vals)
+    width = max_x - min_x
+    height = max_y - min_y
+    aspect_ratio = width / height if height != 0 else 0
 
+    # Simple shape rules
+    if 0.8 < aspect_ratio < 1.2:
+        # Could be circle or square
+        if len(traj) > 20:
+            return "circle"
+        else:
+            return "square"
+    elif width > 0 and height > 0:
+        return "triangle"
+    return None
+
+# -------------------------------
+# Main loop
+# -------------------------------
 while True:
     success, frame = cap.read()
     frame = cv2.flip(frame, 1)
@@ -85,53 +117,77 @@ while True:
 
             index_x, index_y = lm_list[8]
             thumb_x, thumb_y = lm_list[4]
-
-            # Detect fingers
             fingers = fingers_up(lm_list)
-
             current_time = time.time()
 
-            # 4 FINGERS: MULTITASKING VIEW
+            # -------------------------------
+            # Add to trajectory for shape detection
+            # -------------------------------
+            trajectory.append((index_x, index_y))
+            if len(trajectory) > MAX_TRAJECTORY:
+                trajectory.pop(0)
+            for i in range(1, len(trajectory)):
+                cv2.line(frame, trajectory[i-1], trajectory[i], (0, 255, 255), 2)
+
+            # Recognize shape
+            if current_time - last_shape_time > shape_cooldown:
+                shape_detected = recognize_shape(trajectory)
+                if shape_detected == "circle":
+                    pyautogui.press("win")
+                    time.sleep(0.1)
+                    pyautogui.typewrite("calculator")
+                    pyautogui.press("enter")
+                    last_shape_time = current_time
+                    trajectory.clear()
+                elif shape_detected == "square":
+                    webbrowser.open("https://www.youtube.com")
+                    last_shape_time = current_time
+                    trajectory.clear()
+                elif shape_detected == "triangle":
+                    pyautogui.hotkey("ctrl", "f")
+                    last_shape_time = current_time
+                    trajectory.clear()
+
+                if shape_detected:
+                    cv2.putText(frame, f"Detected: {shape_detected.upper()}", (10, 130),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+
+            # -------------------------------
+            # 4 Fingers: Multitasking
+            # -------------------------------
             if fingers[1] and fingers[2] and fingers[3] and fingers[4] and not fingers[0]:
                 cv2.putText(frame, "MULTITASKING MODE (4 FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 100, 0), 2)
-
-                # Draw blue dots on all four fingertips
                 for tip_id in [8, 12, 16, 20]:
                     cv2.circle(frame, lm_list[tip_id], 15, (255, 100, 0), cv2.FILLED)
-
-                # Trigger multitasking view only once per gesture
                 if current_time - last_multitask_time > multitask_cooldown:
                     pyautogui.hotkey('win', 'tab')
                     last_multitask_time = current_time
                     multitask_active = True
 
-            # 3 FINGERS: SCROLL MODE
+            # -------------------------------
+            # 3 Fingers: Scroll
+            # -------------------------------
             elif fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
                 avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
-
-                # Draw blue dots on 3 fingertips
                 for tip_id in [8, 12, 16]:
                     cv2.circle(frame, lm_list[tip_id], 15, (255, 0, 0), cv2.FILLED)
-
                 cv2.putText(frame, "SCROLL MODE (3 FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
-
                 if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
                     dy = avg_y - prev_scroll_y
                     if abs(dy) > 2:
                         scroll_amount = -int(dy * scroll_sensitivity)
                         pyautogui.scroll(scroll_amount)
                         last_scroll_time = current_time
-
                 prev_scroll_y = avg_y
-                continue  # freeze cursor
-
+                continue
             else:
                 prev_scroll_y = None
 
-            # VIRTUAL DESKTOP SWITCH (SWIPE GESTURE)
-            # Only when 4 fingers up, thumb down
+            # -------------------------------
+            # Virtual Desktop Swipe
+            # -------------------------------
             if all(fingers[1:]) and not fingers[0]:
                 dx = index_x - last_swipe_x
                 if abs(dx) > swipe_threshold and (current_time - last_swipe_time) > swipe_cooldown:
@@ -146,32 +202,35 @@ while True:
                     last_swipe_time = current_time
                 last_swipe_x = index_x
 
-            # NORMAL CURSOR CONTROL
+            # -------------------------------
+            # Cursor Control
+            # -------------------------------
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
-
             velocity_x = velocity_x * (1 - velocity_smooth) + (target_x - prev_x) * velocity_smooth
             velocity_y = velocity_y * (1 - velocity_smooth) + (target_y - prev_y) * velocity_smooth
-
             predicted_x = target_x + velocity_x * prediction_factor
             predicted_y = target_y + velocity_y * prediction_factor
             prev_x = prev_x + (predicted_x - prev_x) * smooth_factor
             prev_y = prev_y + (predicted_y - prev_y) * smooth_factor
-
             pyautogui.moveTo(prev_x, prev_y, duration=0)
 
-            # Draw pointer
+            # Pointer visuals
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
-            # --- CLICK ---
+            # -------------------------------
+            # Click
+            # -------------------------------
             if fingers[1] and fingers[2] and not dragging and not fingers[3]:
-                if time.time() - last_click_time > click_cooldown:
+                if current_time - last_click_time > click_cooldown:
                     pyautogui.click()
-                    last_click_time = time.time()
+                    last_click_time = current_time
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # DRAG
+            # -------------------------------
+            # Drag
+            # -------------------------------
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
@@ -182,7 +241,8 @@ while True:
                     pyautogui.mouseUp()
                     dragging = False
 
-    cv2.imshow("Gesture Mouse + Scroll + Multitasking + Swipe", frame)
+    # Show frame
+    cv2.imshow("Gesture System: Cursor + Scroll + Multitask + Swipe + Shapes", frame)
     if cv2.waitKey(1) & 0xFF == 27:  # ESC to quit
         break
 
