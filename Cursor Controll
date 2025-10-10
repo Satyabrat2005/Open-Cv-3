@@ -40,14 +40,14 @@ scroll_cooldown = 0.05
 last_scroll_time = 0
 
 # Multitasking mode
-multitask_cooldown = 2.5  # avoid retriggering instantly
+multitask_cooldown = 2.5 
 last_multitask_time = 0
 multitask_active = False
 
 # Virtual Desktop Swipe tracking
 last_swipe_time = 0
 last_swipe_x = 0
-swipe_threshold = 100  # minimum x displacement to trigger swipe
+swipe_threshold = 100  
 swipe_cooldown = 1.0   # seconds between swipes
 
 
@@ -106,7 +106,7 @@ while True:
                     last_multitask_time = current_time
                     multitask_active = True
 
-            # --- 3 FINGERS: SCROLL MODE ---
+            # 3 FINGERS: SCROLL MODE
             elif fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
                 avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
 
@@ -130,7 +130,7 @@ while True:
             else:
                 prev_scroll_y = None
 
-            # --- VIRTUAL DESKTOP SWITCH (SWIPE GESTURE) ---
+            # VIRTUAL DESKTOP SWITCH (SWIPE GESTURE)
             # Only when 4 fingers up, thumb down
             if all(fingers[1:]) and not fingers[0]:
                 dx = index_x - last_swipe_x
@@ -146,7 +146,7 @@ while True:
                     last_swipe_time = current_time
                 last_swipe_x = index_x
 
-            # --- NORMAL CURSOR CONTROL ---
+            # NORMAL CURSOR CONTROL
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
 
@@ -171,7 +171,7 @@ while True:
                     last_click_time = time.time()
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # --- DRAG ---
+            # DRAG
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
