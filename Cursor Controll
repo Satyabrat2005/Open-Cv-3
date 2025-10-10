@@ -91,7 +91,7 @@ while True:
 
             current_time = time.time()
 
-            # --- 4 FINGERS: MULTITASKING VIEW ---
+            # 4 FINGERS: MULTITASKING VIEW
             if fingers[1] and fingers[2] and fingers[3] and fingers[4] and not fingers[0]:
                 cv2.putText(frame, "MULTITASKING MODE (4 FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 100, 0), 2)
