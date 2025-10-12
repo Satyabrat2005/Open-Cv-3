@@ -53,17 +53,13 @@ last_swipe_x = 0
 swipe_threshold = 100
 swipe_cooldown = 1.0
 
-# -------------------------------
 # Gesture Sequence Recognition
-# -------------------------------
 trajectory = []
 MAX_TRAJECTORY = 50
 last_shape_time = 0
 shape_cooldown = 1.5  # avoid multiple triggers
 
-# -------------------------------
 # Helper functions
-# -------------------------------
 def fingers_up(lm_list):
     fingers = []
     fingers.append(lm_list[4][0] > lm_list[3][0])
@@ -100,9 +96,7 @@ def recognize_shape(traj):
         return "triangle"
     return None
 
-# -------------------------------
 # Main loop
-# -------------------------------
 while True:
     success, frame = cap.read()
     frame = cv2.flip(frame, 1)
@@ -151,9 +145,7 @@ while True:
                     cv2.putText(frame, f"Detected: {shape_detected.upper()}", (10, 130),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
-            # -------------------------------
             # 4 Fingers: Multitasking
-            # -------------------------------
             if fingers[1] and fingers[2] and fingers[3] and fingers[4] and not fingers[0]:
                 cv2.putText(frame, "MULTITASKING MODE (4 FINGERS)", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 100, 0), 2)
@@ -164,9 +156,7 @@ while True:
                     last_multitask_time = current_time
                     multitask_active = True
 
-            # -------------------------------
             # 3 Fingers: Scroll
-            # -------------------------------
             elif fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
                 avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
                 for tip_id in [8, 12, 16]:
@@ -184,9 +174,7 @@ while True:
             else:
                 prev_scroll_y = None
 
-            # -------------------------------
             # Virtual Desktop Swipe
-            # -------------------------------
             if all(fingers[1:]) and not fingers[0]:
                 dx = index_x - last_swipe_x
                 if abs(dx) > swipe_threshold and (current_time - last_swipe_time) > swipe_cooldown:
@@ -201,9 +189,7 @@ while True:
                     last_swipe_time = current_time
                 last_swipe_x = index_x
 
-            # -------------------------------
             # Cursor Control
-            # -------------------------------
             target_x = np.interp(index_x, [frame_margin, wCam - frame_margin], [0, screen_w])
             target_y = np.interp(index_y, [frame_margin, hCam - frame_margin], [0, screen_h])
             velocity_x = velocity_x * (1 - velocity_smooth) + (target_x - prev_x) * velocity_smooth
@@ -218,18 +204,14 @@ while True:
             cv2.circle(frame, (index_x, index_y), 10, (255, 0, 0), cv2.FILLED)
             cv2.circle(frame, (int(prev_x * wCam / screen_w), int(prev_y * hCam / screen_h)), 15, (0, 255, 0), 2)
 
-            # -------------------------------
             # Click
-            # -------------------------------
             if fingers[1] and fingers[2] and not dragging and not fingers[3]:
                 if current_time - last_click_time > click_cooldown:
                     pyautogui.click()
                     last_click_time = current_time
                     cv2.circle(frame, (index_x, index_y), 20, (0, 255, 0), cv2.FILLED)
 
-            # -------------------------------
             # Drag
-            # -------------------------------
             if distance((index_x, index_y), (thumb_x, thumb_y)) < 40:
                 if not dragging:
                     pyautogui.mouseDown()
