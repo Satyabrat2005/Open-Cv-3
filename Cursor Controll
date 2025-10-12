@@ -85,9 +85,7 @@ def stop_data_collection():
         print("[INFO] Data collection stopped and file saved.")
     collecting_data = False
 
-# -------------------------------
 # Helper functions
-# -------------------------------
 def fingers_up(lm_list):
     fingers = []
     fingers.append(lm_list[4][0] > lm_list[3][0])
@@ -123,9 +121,7 @@ def recognize_shape(traj):
         return "triangle"
     return None
 
-# -------------------------------
 # Main loop
-# -------------------------------
 while True:
     success, frame = cap.read()
     frame = cv2.flip(frame, 1)
