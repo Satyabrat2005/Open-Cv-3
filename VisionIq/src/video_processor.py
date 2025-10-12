@@ -19,5 +19,5 @@ def extract_frames(video_path, output_dir, frame_rate=1):
             frame_id += 1
         count += 1
     cap.release()
-    return frame_id  # total frames saved
+    return frame_id 
     
