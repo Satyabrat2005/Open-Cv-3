@@ -6,6 +6,7 @@ def detetct_objects(frame_path):
     objects = []
     for r in results:
         for box in r.boxes:
-            cls_id = int(box.cls[0])
-            conf = float(box.conf[0])
-            objects.append((cls_id, conf))
+            label = model.names[int(box.cls[0])]
+            confidence = float(box.conf[0])
+            objects.append({"label": label, "confidence": confidence})
+    return objects
