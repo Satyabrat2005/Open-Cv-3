@@ -161,22 +161,6 @@ while True:
             # Recognize shape gestures
             if current_time - last_shape_time > shape_cooldown:
                 shape_detected = recognize_shape(trajectory)
-                if shape_detected == "circle":
-                    pyautogui.press("win")
-                    time.sleep(0.1)
-                    pyautogui.typewrite("calculator")
-                    pyautogui.press("enter")
-                    last_shape_time = current_time
-                    trajectory.clear()
-                elif shape_detected == "square":
-                    webbrowser.open("https://www.youtube.com")
-                    last_shape_time = current_time
-                    trajectory.clear()
-                elif shape_detected == "triangle":
-                    pyautogui.hotkey("ctrl", "f")
-                    last_shape_time = current_time
-                    trajectory.clear()
-
                 if shape_detected:
                     cv2.putText(frame, f"Detected: {shape_detected.upper()}", (10, 130),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
@@ -191,23 +175,27 @@ while True:
                     pyautogui.hotkey('win', 'tab')
                     last_multitask_time = current_time
 
-            # Gesture: Scroll (3 Fingers)
-            elif fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
-                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3
+            # Check for three fingers up, thumb and pinky down
+            if fingers[1] and fingers[2] and fingers[3] and not fingers[0] and not fingers[4]:
+                avg_y = (lm_list[8][1] + lm_list[12][1] + lm_list[16][1]) / 3  # Average Y position of fingertips
+                # Draw markers on tracked fingers
                 for tip_id in [8, 12, 16]:
                     cv2.circle(frame, lm_list[tip_id], 15, (255, 0, 0), cv2.FILLED)
-                cv2.putText(frame, "SCROLL MODE (3 FINGERS)", (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
+                cv2.putText(frame, "SCROLL MODE (3 FINGERS)", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
+                
+                # Only scroll if enough time has passed
                 if prev_scroll_y is not None and current_time - last_scroll_time > scroll_cooldown:
                     dy = avg_y - prev_scroll_y
-                    if abs(dy) > 2:
+                    if abs(dy) > 2:  # Change threshold as needed
                         scroll_amount = -int(dy * scroll_sensitivity)
                         pyautogui.scroll(scroll_amount)
                         last_scroll_time = current_time
                 prev_scroll_y = avg_y
                 continue
             else:
+                # Gesture not detected — reset tracker
                 prev_scroll_y = None
+
 
             # Virtual Desktop Swipe
             if all(fingers[1:]) and not fingers[0]:
