@@ -16,13 +16,17 @@ class VectorDB:
         self.index.add(np.array([embedding], dtype=np.float32))
         self.metadata.append(meta)
 
-    def search(self, query_vector, top_k=5):
-        query_vector = np.array([query_vector]).astype('float32')
-        distances, indices = self.index.search(query_vector, top_k)
-        results = [(self.metadata[i], distances[0][j]) for j, i in enumerate(indices[0]) if i != -1]
+    def search(self, query_embedding, top_k=5):
+        D, I = self.index.search(np.array([query_embedding], dtype=np.float32), top_k)
+        results = [self.metadata[i] for i in I[0]]
         return results
 
-    def _save(self):
+    def save(self):
         faiss.write_index(self.index, self.index_file)
-        with open(self.meta_file, 'wb') as f:
+        with open(self.index_file + ".meta", "wb") as f:
             pickle.dump(self.metadata, f)
+
+    def load(self):
+        self.index = faiss.read_index(self.index_file)
+        with open(self.index_file + ".meta", "rb") as f:
+            self.metadata = pickle.load(f) 
