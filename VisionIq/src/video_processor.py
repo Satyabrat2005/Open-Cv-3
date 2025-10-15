@@ -1,4 +1,3 @@
-from xml.etree.ElementPath import ops
 import cv2
 import os
 
