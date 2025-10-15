@@ -7,7 +7,7 @@ class VectorDB:
     def __init__(self, dim, index_file="data/embeddings/index.faiss"):
         self.dim = dim
         self.index_file = index_file
-        self.index = faiss.IndexFlatL2(dim)  # CPU only
+        self.index = faiss.IndexFlatL2(dim)  
         self.metadata = []
         if os.path.exists(index_file):
             self.load()
