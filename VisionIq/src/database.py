@@ -1,13 +1,13 @@
 import faiss
 import numpy as np
-import os 
-import pickle 
+import os
+import pickle
 
 class VectorDB:
-    def __init__(self, dim, db_path='vector_db'):
+    def __init__(self, dim, index_file="data/embeddings/index.faiss"):
         self.dim = dim
         self.index_file = index_file
-        self.index = faiss.IndexFlatL2(dim)
+        self.index = faiss.IndexFlatL2(dim)  # CPU only
         self.metadata = []
         if os.path.exists(index_file):
             self.load()
@@ -29,4 +29,4 @@ class VectorDB:
     def load(self):
         self.index = faiss.read_index(self.index_file)
         with open(self.index_file + ".meta", "rb") as f:
-            self.metadata = pickle.load(f) 
+            self.metadata = pickle.load(f)
