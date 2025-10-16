@@ -1,4 +1,6 @@
 from ultralytics import YOLO  # type: ignore
+import os 
+import cv2
 
 class ObjectDetector:
     def __init__(self, model_path="yolov8n.pt"):
