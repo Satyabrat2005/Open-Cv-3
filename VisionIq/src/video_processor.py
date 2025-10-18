@@ -5,6 +5,7 @@ def extract_frames(video_path, output_dir, frame_rate=1):
     """
     Extracts frames from a video at a given rate (frames per second).
     Saves them in output_dir as frame_00001.jpg, frame_00002.jpg, etc.
+    Telling query_engine about video description
     """
     os.makedirs(output_dir, exist_ok=True)
     cap = cv2.VideoCapture(video_path)
