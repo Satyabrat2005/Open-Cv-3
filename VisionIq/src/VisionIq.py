@@ -18,3 +18,25 @@ def main():
     detector = ObjectDetector()
     embedder = FrameEmbedder()
     db = VectorDB(dim=EMBEDDINGS_DIM)
+
+    print("Processing frames...")
+    for frame_file in sorted(os.listdir(FRAMES_DIR)):
+        frame_path = os.path.join(FRAMES_DIR, frame_file)
+        detections = detector.detect(frame_path)
+        embedding = embedder.embed(frame_path)
+
+        meta = {"frame": frame_path, "objects": detections.tolist()}
+        db.add(embedding, meta)
+
+    db.save()
+    print("All embeddings saved.")
+
+    print("Ready for queries.")
+    engine = QueryEngine(db)
+    query = input("Ask something: ")
+    results = engine.search(query)
+    for r in results:
+        print(r["frame"], "-> Objects:", len(r["objects"]))
+
+if __name__ == "__main__":
+    main()
