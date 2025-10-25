@@ -1,20 +1,20 @@
-import os 
-from src.video_processor import extract_frames
-from src.object_detector import detect_objects
-from src.embedder import get_embedding
-from src.database import VectorDB
+import os
+from video_processor import extract_frames
+from object_detector import ObjectDetector
+from embedder import FrameEmbedder
+from database import VectorDB
+from query_engine import QueryEngine
 
-video_file = "data/videos/sample.mp4"
-frames_dir = "data/frames/sample"
-extract_frames(video_file, frames_dir, fps=1)
+VIDEO_PATH = "data/videos/sample.mp4"
+FRAMES_DIR = "data/frames/sample/"
+EMBEDDINGS_DIM = 512
 
-db = VectorDB(dim=512)  # CLIP ViT-B/32 embedding size
+def main():
+    print("Extracting frames...")
+    total = extract_frames(VIDEO_PATH, FRAMES_DIR)
+    print(f"Extracted {total} frames.")
 
-for frame_file in sorted(os.listdir(frames_dir)):
-    frame_path = os.path.join(frames_dir, frame_file)
-    objects = detect_objects(frame_path)
-    embedding = get_embedding(frame_path)
-    meta = {"frame": frame_path, "objects": objects}
-    db.add(embedding[0], meta) 
-db.save()
-print("Video processed and embeddings stored!")
+    print("Loading models...")
+    detector = ObjectDetector()
+    embedder = FrameEmbedder()
+    db = VectorDB(dim=EMBEDDINGS_DIM)
