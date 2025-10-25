@@ -1,1 +1,10 @@
+opencv-python
+ultralytics
+faiss-cpu
+torch
+torchvision
+clip-anytorch
+sentence-transformers
+numpy
+Pillow
 
