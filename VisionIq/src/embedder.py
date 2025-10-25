@@ -1,3 +1,3 @@
-import cv2
-import deepface
-from ultralytics import yolov8
+import torch
+import clip
+from PIL import Image
