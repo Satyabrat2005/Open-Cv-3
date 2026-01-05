@@ -1,5 +1,6 @@
 from object_detector import ObjectDetector
 import os
+import cv2
 
 detector = ObjectDetector()
 
