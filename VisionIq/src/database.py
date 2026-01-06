@@ -30,3 +30,6 @@ class VectorDatabase:
         embedding : np.ndarray (512,)
         meta      : dict (frame_path, objects, timestamp, etc.)
         """
+        embedding = np.asarray(embedding, dtype=np.float32).reshape(1, -1)
+        self.index.add(embedding)
+        self.metadata.append(meta)
