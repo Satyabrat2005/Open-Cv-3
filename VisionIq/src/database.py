@@ -15,3 +15,11 @@ class VectorDatabase:
         os.makedirs(db_path, exist_ok=True)
         self.index_file = os.path.join(db_path, "faiss.index")
         self.meta_file = os.path.join(db_path, "metadata.pkl")
+
+        # Initialize index
+        self.index = faiss.IndexFlatIP(dim)  # cosine similarity (with normalized vectors)
+        self.metadata = []
+
+        # Load if exists
+        if os.path.exists(self.index_file) and os.path.exists(self.meta_file):
+            self._load()
