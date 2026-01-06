@@ -61,3 +61,11 @@ class VectorDatabase:
         faiss.write_index(self.index, self.index_file)
         with open(self.meta_file, "wb") as f:
             pickle.dump(self.metadata, f)
+
+    def save(self):
+        """
+        Persist FAISS index and metadata to disk
+        """
+        faiss.write_index(self.index, self.index_file)
+        with open(self.meta_file, "wb") as f:
+            pickle.dump(self.metadata, f)
