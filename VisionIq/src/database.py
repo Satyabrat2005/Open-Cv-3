@@ -33,3 +33,12 @@ class VectorDatabase:
         embedding = np.asarray(embedding, dtype=np.float32).reshape(1, -1)
         self.index.add(embedding)
         self.metadata.append(meta)
+
+    def search(self, query_embedding, top_k=5):
+        """
+        Search most similar embeddings
+        query_embedding : np.ndarray (512,)
+        """
+        query_embedding = np.asarray(query_embedding, dtype=np.float32).reshape(1, -1)
+
+        scores, indices = self.index.search(query_embedding, top_k)
