@@ -69,3 +69,6 @@ class VectorDatabase:
         faiss.write_index(self.index, self.index_file)
         with open(self.meta_file, "wb") as f:
             pickle.dump(self.metadata, f)
+
+    def __len__(self):
+        return len(self.metadata)
