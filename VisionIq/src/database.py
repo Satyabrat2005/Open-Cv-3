@@ -42,3 +42,14 @@ class VectorDatabase:
         query_embedding = np.asarray(query_embedding, dtype=np.float32).reshape(1, -1)
 
         scores, indices = self.index.search(query_embedding, top_k)
+
+        results = []
+        for score, idx in zip(scores[0], indices[0]):
+            if idx == -1:
+                continue
+            results.append({
+                "score": float(score),
+                "meta": self.metadata[idx]
+            })
+
+        return results
