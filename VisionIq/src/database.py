@@ -23,3 +23,10 @@ class VectorDatabase:
         # Load if exists
         if os.path.exists(self.index_file) and os.path.exists(self.meta_file):
             self._load()
+
+    def add(self, embedding, meta):
+        """
+        Add a single embedding + metadata
+        embedding : np.ndarray (512,)
+        meta      : dict (frame_path, objects, timestamp, etc.)
+        """
