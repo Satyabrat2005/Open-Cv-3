@@ -24,3 +24,7 @@ class ObjectDetector:
         for r in results:
             if r.boxes is None:
                 continue
+
+        for box in r.boxes:
+                label = self.model.names[int(box.cls[0])]
+                confidence = float(box.conf[0])
