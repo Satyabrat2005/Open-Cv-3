@@ -10,3 +10,9 @@ class ClipEmbedder:
         """
         if device is none:
             device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        self.device = device
+        self.model, self.preprocess = clip.load(model_name, device=self.device)
+        self.model.eval()
+
+        print(f"✅ CLIP model loaded: {model_name} on {self.device}")
