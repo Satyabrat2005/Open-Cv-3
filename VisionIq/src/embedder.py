@@ -35,3 +35,10 @@ class ClipEmbedder:
         Generate normalized CLIP embedding for a text query
         """
         text_tokens = clip.tokenize([text]).to(self.device)
+
+        with torch.no_grad():
+            embedding = self.model.encode_text(text_tokens)
+
+        embedding = embedding / embedding.norm(dim=-1, keepdim=True)
+        return embedding.cpu().numpy()[0]  
+
