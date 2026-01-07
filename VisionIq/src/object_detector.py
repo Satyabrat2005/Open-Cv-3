@@ -1,26 +1,10 @@
-from ultralytics import YOLO  # type: ignore
-import os 
-import cv2
+from ultralytics import YOLO  
 
 class ObjectDetector:
-    def __init__(self, model_path="yolov8n.pt"):
+    def __init__(self, model_path="yolov8n.pt", conf=0.15):
         """
-        Initialize YOLOv8 object detector.
-        Default model: yolov8n.pt (lightweight and fast)
+        model_path : YOLO model file
+        conf       : confidence threshold
         """
         self.model = YOLO(model_path)
-
-    def detect_objects(self, frame_path):
-        """
-        Runs YOLOv8 detection on a single frame and returns detected objects.
-        """
-        results = self.model(frame_path)
-        objects = []
-
-        for r in results:
-            for box in r.boxes:
-                label = self.model.names[int(box.cls[0])]
-                confidence = float(box.conf[0])
-                objects.append({"label": label, "confidence": confidence})
-
-        return objects
+        self.conf = conf
