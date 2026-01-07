@@ -8,4 +8,5 @@ class ClipEmbedder:
         """
         CLIP embedder for images and text
         """
-        if device is none 
+        if device is none:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
