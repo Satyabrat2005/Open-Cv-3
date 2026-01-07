@@ -18,3 +18,9 @@ class ObjectDetector:
             conf=self.conf,
             verbose=False
         )
+
+        objects = []
+
+        for r in results:
+            if r.boxes is None:
+                continue
