@@ -29,3 +29,9 @@ class ClipEmbedder:
 
         embedding = embedding / embedding.norm(dim=-1, keepdim=True)
         return embedding.cpu().numpy()[0]  # (frame embedding)
+
+    def embed_text(self, text):
+        """
+        Generate normalized CLIP embedding for a text query
+        """
+        text_tokens = clip.tokenize([text]).to(self.device)
