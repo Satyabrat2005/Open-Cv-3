@@ -8,3 +8,8 @@ class ObjectDetector:
         """
         self.model = YOLO(model_path)
         self.conf = conf
+
+    def detect_objects(self, frame_path):
+        """
+        Runs YOLO on a single frame and returns detected objects
+        """
