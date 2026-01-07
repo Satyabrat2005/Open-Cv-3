@@ -5,3 +5,10 @@ from database import VectorDatabase
 
 class QueryEngine:
     def __init__(self, top_k=5):
+        """
+        Query engine for VisionIQ
+        top_k : number of frames to retrieve
+        """
+        self.embedder = ClipEmbedder()
+        self.db = VectorDatabase()
+        self.top_k = top_k
