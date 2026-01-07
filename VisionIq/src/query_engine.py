@@ -17,3 +17,11 @@ class QueryEngine:
             print("⚠️ Vector DB is empty. Index frames first.")
 
     def query(self, question):
+        """
+        Query the video memory with a natural language question
+        """
+        # Embed the text query
+        query_embedding = self.embedder.embed_text(question)
+
+        # Search FAISS
+        results = self.db.search(query_embedding, top_k=self.top_k)
