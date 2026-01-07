@@ -16,3 +16,10 @@ class ClipEmbedder:
         self.model.eval()
 
         print(f"✅ CLIP model loaded: {model_name} on {self.device}")
+
+    def embed_image(self, image_path):
+        """
+        Generate normalized CLIP embedding for an image frame
+        """
+        image = Image.open(image_path).convert("RGB")
+        image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
