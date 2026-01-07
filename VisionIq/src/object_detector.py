@@ -13,3 +13,8 @@ class ObjectDetector:
         """
         Runs YOLO on a single frame and returns detected objects
         """
+        results = self.model.predict(
+            frame_path,
+            conf=self.conf,
+            verbose=False
+        )
