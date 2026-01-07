@@ -28,3 +28,10 @@ class ObjectDetector:
         for box in r.boxes:
                 label = self.model.names[int(box.cls[0])]
                 confidence = float(box.conf[0])
+
+                objects.append({
+                    "label": label,
+                    "confidence": confidence
+                })
+
+        return objects
