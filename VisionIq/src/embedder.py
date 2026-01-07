@@ -23,3 +23,9 @@ class ClipEmbedder:
         """
         image = Image.open(image_path).convert("RGB")
         image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
+
+        with torch.no_grad():
+            embedding = self.model.encode_image(image_tensor)
+
+        embedding = embedding / embedding.norm(dim=-1, keepdim=True)
+        return embedding.cpu().numpy()[0]  # (frame embedding)
