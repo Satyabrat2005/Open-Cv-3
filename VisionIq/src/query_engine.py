@@ -43,3 +43,26 @@ class QueryEngine:
 
             frame_id = meta.get("frame_id", "unknown")
             frame_path = meta.get("frame_path", "")
+
+            answer_lines.append(
+                f"{rank}. Frame {frame_id} (similarity {score:.2f})"
+            )
+
+            formatted_results.append({
+                "rank": rank,
+                "score": score,
+                "frame_id": frame_id,
+                "frame_path": frame_path,
+                "meta": meta
+            })
+
+        answer_text = (
+            f"I found {len(results)} relevant scene(s) for your query:\n"
+            + "\n".join(answer_lines)
+        )
+
+        return {
+            "question": question,
+            "answer": answer_text,
+            "results": formatted_results
+        }
