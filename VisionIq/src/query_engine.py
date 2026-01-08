@@ -36,3 +36,10 @@ class QueryEngine:
         # 3. Build response
         answer_lines = []
         formatted_results = []
+
+        for rank, r in enumerate(results, start=1):
+            meta = r["meta"]
+            score = r["score"]
+
+            frame_id = meta.get("frame_id", "unknown")
+            frame_path = meta.get("frame_path", "")
