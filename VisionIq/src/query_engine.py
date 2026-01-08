@@ -25,3 +25,14 @@ class QueryEngine:
 
         # Search FAISS
         results = self.db.search(query_embedding, top_k=self.top_k)
+
+        if not results:
+            return {
+                "question": question,
+                "answer": "No relevant scenes found.",
+                "results": []
+            }
+
+        # 3. Build response
+        answer_lines = []
+        formatted_results = []
