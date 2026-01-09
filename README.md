@@ -171,3 +171,9 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+## Basic Query Engine (V1)
+
+> VisionIQ already supports semantic video querying without any language model.
+
+This baseline system allows users to search videos and retrieve relevant frames
+based purely on visual understanding and vector similarity.
