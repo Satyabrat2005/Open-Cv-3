@@ -177,3 +177,44 @@ pip install -r requirements.txt
 
 This baseline system allows users to search videos and retrieve relevant frames
 based purely on visual understanding and vector similarity.
+
+## ▶️ Running the Query Engine
+
+```bash
+cd src
+python test_query_engine.py
+```
+
+## Example Query 
+
+```bash
+>> where is bottle
+```
+
+## OUTPUT (without LLM Frame detection and embedding)
+```bash
+💡 VisionIQ Query (type 'exit' to quit)
+
+ANSWER
+--------------------------------------------------
+I found 5 relevant scene(s) for your query:
+
+1. Frame frame_00004.jpg (similarity 0.27)
+2. Frame frame_00001.jpg (similarity 0.26)
+3. Frame frame_00005.jpg (similarity 0.26)
+4. Frame frame_00000.jpg (similarity 0.26)
+5. Frame frame_00007.jpg (similarity 0.25)
+
+📷 MATCHED FRAMES
+--------------------------------------------------
+Rank 1 | Score: 0.270 | Frame: frame_00004.jpg
+Rank 2 | Score: 0.262 | Frame: frame_00001.jpg
+Rank 3 | Score: 0.259 | Frame: frame_00005.jpg
+Rank 4 | Score: 0.256 | Frame: frame_00000.jpg
+Rank 5 | Score: 0.248 | Frame: frame_00007.jpg
+```
+
+## AI should not just generate text.
+## It should understand reality.
+
+> VisionIQ is built on the principle that intelligence must be grounded in evidence.
