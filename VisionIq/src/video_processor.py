@@ -24,3 +24,13 @@ def extract_frames(video_path, output_dir, frame_rate=1):
         ret, frame = cap.read()
         if not ret:
             break
+
+        if count % interval == 0:
+            frame_path = os.path.join(output_dir, f"frame_{frame_id:05d}.jpg")
+            cv2.imwrite(frame_path, frame)
+            frame_id += 1
+
+        count += 1
+
+    cap.release()
+    return frame_id
