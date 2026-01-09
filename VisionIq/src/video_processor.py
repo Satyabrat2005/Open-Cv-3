@@ -14,3 +14,13 @@ def extract_frames(video_path, output_dir, frame_rate=1):
     if video_fps == 0 or video_fps is None:
         print("[WARNING] FPS not detected, defaulting to 30")
         video_fps = 30
+
+    interval = max(1, int(video_fps // frame_rate))
+
+    count = 0
+    frame_id = 0
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
