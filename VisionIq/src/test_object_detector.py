@@ -37,3 +37,18 @@ for idx in range(MAX_FRAMES):
     if not objects:
         print("  └─ No objects detected\n")
         continue
+
+    for obj in objects:
+        label = obj["label"]
+        conf = round(obj["confidence"], 2)
+        summary[label] += 1
+        print(f"  └─ {label} ({conf})")
+
+    print()
+
+# Final summary
+print("\n📊 DETECTION SUMMARY")
+print("-" * 35)
+
+for label, count in sorted(summary.items(), key=lambda x: -x[1]):
+    print(f"{label}: detected in {count} frames")
