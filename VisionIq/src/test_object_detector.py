@@ -27,3 +27,13 @@ summary = defaultdict(int)
 
 # Limit frames to avoid overload
 MAX_FRAMES = min(10, len(frames))
+
+for idx in range(MAX_FRAMES):
+    frame_path = os.path.join(frames_dir, frames[idx])
+    print(f"🖼 Frame {idx + 1}: {frames[idx]}")
+
+    objects = detector.detect_objects(frame_path)
+
+    if not objects:
+        print("  └─ No objects detected\n")
+        continue
