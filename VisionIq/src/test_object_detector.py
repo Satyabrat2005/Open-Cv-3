@@ -15,3 +15,15 @@ frames = sorted([
     f for f in os.listdir(frames_dir)
     if f.endswith(".jpg")
 ])
+
+if not frames:
+    print("❌ No frames found in:", frames_dir)
+    exit()
+
+print(f"🔍 Found {len(frames)} frames. Running YOLO...\n")
+
+# Store summary
+summary = defaultdict(int)
+
+# Limit frames to avoid overload
+MAX_FRAMES = min(10, len(frames))
