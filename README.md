@@ -1,220 +1,275 @@
-# 🧠 VisionIQ
-## Ask Your Video Anything
+# Open-CV-3 👁️‍🗨️
 
-> VisionIQ is an AI system that watches videos, understands them frame by frame, remembers what happens, and allows users to query video content using natural language.
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge\&logo=python)
+![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge\&logo=opencv)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
-VisionIQ is not just object detection.  
-It is not just captioning.  
-It is **video intelligence**.
+> **A curated collection of advanced computer vision projects built using OpenCV, Python, and modern CV techniques.**
+> This repository serves as a growing hub for experimental, research-oriented, and real‑world computer vision applications.
 
 ---
 
 ## 🚀 Overview
 
-Video data is exploding across industries, yet videos remain largely unsearchable and unintelligent.
+**Open-CV-3** is a personal computer vision workspace where I consolidate and evolve my OpenCV-based projects. The goal of this repository is not just to demonstrate OpenCV usage, but to push toward **practical, intelligent, and interactive vision systems**.
 
-VisionIQ transforms raw video into a **queryable, semantic memory**.
+This repo currently contains:
 
-You upload a video.  
-VisionIQ processes it frame by frame.  
-You query the video using text.  
-VisionIQ retrieves the most relevant visual moments.
+* 🖐️ **Cursor Control using Hand Gestures**
+* 👁️ **VisionIQ – A modular computer vision experimentation framework**
 
----
-
-## 🧩 Example Queries
-
-- Where is the bottle?
-- When does the laptop appear in the video?
-- What happens before the bottle is visible?
-- Show scenes with a backpack and a laptop.
-- What objects appear throughout the video?
-
-VisionIQ answers using **what the video actually shows**, not assumptions.
+More projects will be continuously added as this repository grows.
 
 ---
 
-## 🎯 Why VisionIQ
+## 📁 Repository Structure
 
-Most AI systems treat video as static frames or auto-generated captions.
-
-VisionIQ treats video as **experience over time**.
-
-It combines:
-- Vision
-- Semantics
-- Memory
-- Retrieval
-
-This enables **searchable, explainable, and evidence-based video understanding**.
-
----
-
-## 🧠 Core Capabilities (Current)
-
-### Video Understanding
-- Frame-by-frame video processing
-- Temporal awareness (before / after / during)
-- Object-level perception
-
-### Semantic Search
-- Text-to-frame similarity search
-- Robust to partial visibility
-- Ranked retrieval of relevant frames
-
-### Intelligent Memory
-- Vector-based storage using FAISS
-- Persistent frame-level indexing
-- Deterministic and explainable results
-
-### Privacy First
-- Fully local execution
-- No cloud dependency
-- Suitable for sensitive or private videos
-
----
-
-## 🧠 Advanced Capabilities (Planned)
-
-- LLM-based reasoning over retrieved frames
-- Natural language answers with explanations
-- Multi-object logical queries (AND / OR)
-- Cross-video semantic search
-
----
-
-## 🏗️ System Architecture
-
-Video  
-↓  
-Frame Extraction (OpenCV)  
-↓  
-Object Detection (YOLOv8)  
-↓  
-Semantic Embeddings  
-↓  
-Vector Memory (FAISS)  
-↓  
-Query Engine  
-↓  
-Ranked Frame Results  
-↓  
-(LLM Reasoning – optional layer)
-
----
-
-## 🧰 Technology Stack
-
-| Layer | Technology |
-|-----|-----------|
-| Video Processing | OpenCV |
-| Object Detection | YOLOv8 |
-| Embeddings | CLIP |
-| Vector Store | FAISS |
-| Query Engine | Python |
-| Reasoning (optional) | DeepSeek-R1 |
-| Deployment | Local / On-Prem / SaaS-ready |
-
----
-
-## 📁 Project Structure
-
-visioniq/
-├── src/
-│   ├── video_processor.py     # Frame extraction
-│   ├── object_detector.py     # YOLO detection
-│   ├── embedder.py            # Embedding generation
-│   ├── database.py            # FAISS vector memory
-│   ├── query_engine.py        # Retrieval logic
-│   ├── llm_engine.py          # (Optional) LLM reasoning
-│   └── main.py
+```text
+Open-CV-3/
 │
-├── data/
-│   ├── videos/
-│   ├── frames/
-│   └── embeddings/
+├── cursor-control/
+│   ├── src/
+│   ├── models/
+│   ├── utils/
+│   ├── main.py
+│   └── README.md
 │
-├── vision-iq-env/             # Virtual environment
+├── visioniq/
+│   ├── core/
+│   ├── pipelines/
+│   ├── experiments/
+│   ├── app.py
+│   └── README.md
+│
 ├── requirements.txt
+├── setup.sh
 └── README.md
+```
 
 ---
 
-## 💻 Hardware Requirements
+## 🖱️ Project 1: Cursor Control using Hand Gestures
 
-Recommended minimum:
+### 🔍 Description
 
-- GPU: RTX 3060 / 4060 (8GB VRAM)
-- RAM: 16 GB
-- Storage: 20 GB+
-- OS: Windows or Linux
+This project implements **real-time cursor control using hand gestures**, leveraging computer vision and hand landmark detection.
 
-Scales with better hardware.
+The system captures live video from the webcam, detects hand landmarks, interprets gestures, and maps them to cursor actions such as:
+
+* Cursor movement
+* Left click
+* Right click
+* Scroll
+
+This project demonstrates how **human–computer interaction (HCI)** can be reimagined using vision-based input systems.
+
+### 🧠 Core Concepts Used
+
+* OpenCV (Video capture & preprocessing)
+* Hand landmark detection (MediaPipe / custom logic)
+* Gesture classification
+* Screen coordinate mapping
+* Real-time performance optimization
+
+### ✨ Features
+
+* Smooth cursor tracking
+* Gesture-based clicking
+* Minimal latency
+* Works with standard webcams
 
 ---
 
-## ⚙️ Installation
+## 👁️ Project 2: VisionIQ
 
-Create virtual environment:
+### 🔍 Description
+
+**VisionIQ** is a modular computer vision experimentation framework designed for rapid prototyping and testing of vision ideas.
+
+It acts as a sandbox where multiple CV pipelines can coexist, such as:
+
+* Object detection
+* Motion tracking
+* Face analysis
+* Image transformations
+* Feature extraction
+
+VisionIQ focuses on **clean architecture**, **extensibility**, and **research-first development**.
+
+### 🧠 Core Concepts Used
+
+* OpenCV pipelines
+* Modular CV architecture
+* Experiment-driven design
+* Performance benchmarking
+
+### ✨ Features
+
+* Plug-and-play vision pipelines
+* Easy experimentation
+* Scalable project structure
+* Research-friendly setup
+
+---
+
+## ⚙️ Installation & Setup
+
+### 📦 Prerequisites
+
+Ensure the following are installed:
+
+* Python **3.9+**
+* pip
+* Webcam (for real-time projects)
+
+---
+
+## 🪟 Windows Setup
 
 ```bash
-py -3.10 -m venv vision-iq-env
-```
+# Clone the repository
+git clone https://github.com/your-username/Open-CV-3.git
+cd Open-CV-3
 
-Activate environment (Windows):
-```bash
-.\vision-iq-env\Scripts\Activate.ps1
-```
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate
 
-Install dependencies:
-```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## Basic Query Engine (V1)
-
-> VisionIQ already supports semantic video querying without any language model.
-
-This baseline system allows users to search videos and retrieve relevant frames
-based purely on visual understanding and vector similarity.
-
-## ▶️ Running the Query Engine
+### Run Cursor Control
 
 ```bash
-cd src
-python test_query_engine.py
+cd cursor-control
+python main.py
 ```
 
-## Example Query 
+### Run VisionIQ
 
 ```bash
->> where is bottle
+cd visioniq
+python app.py
 ```
 
-## OUTPUT (without LLM Frame detection and embedding)
+---
+
+## 🍎 macOS Setup
+
 ```bash
-💡 VisionIQ Query (type 'exit' to quit)
+# Clone repository
+git clone https://github.com/your-username/Open-CV-3.git
+cd Open-CV-3
 
-ANSWER
---------------------------------------------------
-I found 5 relevant scene(s) for your query:
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
-1. Frame frame_00004.jpg (similarity 0.27)
-2. Frame frame_00001.jpg (similarity 0.26)
-3. Frame frame_00005.jpg (similarity 0.26)
-4. Frame frame_00000.jpg (similarity 0.26)
-5. Frame frame_00007.jpg (similarity 0.25)
-
-📷 MATCHED FRAMES
---------------------------------------------------
-Rank 1 | Score: 0.270 | Frame: frame_00004.jpg
-Rank 2 | Score: 0.262 | Frame: frame_00001.jpg
-Rank 3 | Score: 0.259 | Frame: frame_00005.jpg
-Rank 4 | Score: 0.256 | Frame: frame_00000.jpg
-Rank 5 | Score: 0.248 | Frame: frame_00007.jpg
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-## AI should not just generate text.
-## It should understand reality.
+### Run Cursor Control
 
-> VisionIQ is built on the principle that intelligence must be grounded in evidence.
+```bash
+cd cursor-control
+python3 main.py
+```
+
+### Run VisionIQ
+
+```bash
+cd visioniq
+python3 app.py
+```
+
+---
+
+## 🐧 Linux (Ubuntu / Arch)
+
+### Ubuntu
+
+```bash
+sudo apt update
+sudo apt install python3 python3-venv python3-pip
+```
+
+### Arch Linux
+
+```bash
+sudo pacman -S python python-pip
+```
+
+### Setup
+
+```bash
+git clone https://github.com/your-username/Open-CV-3.git
+cd Open-CV-3
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Run Projects
+
+```bash
+cd cursor-control
+python3 main.py
+
+# or
+cd visioniq
+python3 app.py
+```
+
+---
+
+## 📌 Future Roadmap
+
+* ✋ Multi-hand gesture recognition
+* 🧠 AI-based gesture learning
+* 📷 Depth-based vision support
+* ⚡ GPU acceleration
+* 🧩 Plugin system for VisionIQ
+* 📊 Benchmarking & metrics dashboard
+
+---
+
+## 🧪 Philosophy
+
+> *Computer vision should not be locked behind theory alone.*
+> *It should be interactive, experimental, and grounded in real-world use cases.*
+
+Open-CV-3 is built with this mindset — learning by building, testing by experimenting.
+
+---
+
+## 🤝 Contributions
+
+Contributions, discussions, and collaborations are welcome.
+
+If you’re interested in:
+
+* Computer vision
+* Human–computer interaction
+* OpenCV research
+* Experimental AI systems
+
+Feel free to open an issue or reach out.
+
+---
+
+## 📜 License
+
+This project is released under the **MIT License**.
+
+---
+
+## ⭐ Final Note
+
+If you find this repository useful or interesting, consider giving it a ⭐.
+More advanced computer vision projects are on the way.
+
+**Built with curiosity, code, and computer vision.** 👁️✨
