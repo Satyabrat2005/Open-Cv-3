@@ -1,4 +1,4 @@
-# Open-CV-3 👁️‍🗨️
+# Open-CV-3 
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge\&logo=python)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge\&logo=opencv)
@@ -11,20 +11,20 @@
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 **Open-CV-3** is a personal computer vision workspace where I consolidate and evolve my OpenCV-based projects. The goal of this repository is not just to demonstrate OpenCV usage, but to push toward **practical, intelligent, and interactive vision systems**.
 
 This repo currently contains:
 
-* 🖐️ **Cursor Control using Hand Gestures**
-* 👁️ **VisionIQ – A modular computer vision experimentation framework**
+*  **Cursor Control using Hand Gestures**
+*  **VisionIQ – A modular computer vision experimentation framework**
 
 More projects will be continuously added as this repository grows.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 Open-CV-3/
@@ -50,9 +50,9 @@ Open-CV-3/
 
 ---
 
-## 🖱️ Project 1: Cursor Control using Hand Gestures
+##  Project 1: Cursor Control using Hand Gestures
 
-### 🔍 Description
+###  Description
 
 This project implements **real-time cursor control using hand gestures**, leveraging computer vision and hand landmark detection.
 
@@ -65,7 +65,7 @@ The system captures live video from the webcam, detects hand landmarks, interpre
 
 This project demonstrates how **human–computer interaction (HCI)** can be reimagined using vision-based input systems.
 
-### 🧠 Core Concepts Used
+###  Core Concepts Used
 
 * OpenCV (Video capture & preprocessing)
 * Hand landmark detection (MediaPipe / custom logic)
@@ -73,7 +73,7 @@ This project demonstrates how **human–computer interaction (HCI)** can be reim
 * Screen coordinate mapping
 * Real-time performance optimization
 
-### ✨ Features
+###  Features
 
 * Smooth cursor tracking
 * Gesture-based clicking
@@ -82,9 +82,9 @@ This project demonstrates how **human–computer interaction (HCI)** can be reim
 
 ---
 
-## 👁️ Project 2: VisionIQ
+##  Project 2: VisionIQ
 
-### 🔍 Description
+###  Description
 
 **VisionIQ** is a modular computer vision experimentation framework designed for rapid prototyping and testing of vision ideas.
 
@@ -98,14 +98,14 @@ It acts as a sandbox where multiple CV pipelines can coexist, such as:
 
 VisionIQ focuses on **clean architecture**, **extensibility**, and **research-first development**.
 
-### 🧠 Core Concepts Used
+###  Core Concepts Used
 
 * OpenCV pipelines
 * Modular CV architecture
 * Experiment-driven design
 * Performance benchmarking
 
-### ✨ Features
+###  Features
 
 * Plug-and-play vision pipelines
 * Easy experimentation
@@ -114,9 +114,9 @@ VisionIQ focuses on **clean architecture**, **extensibility**, and **research-fi
 
 ---
 
-## ⚙️ Installation & Setup
+##  Installation & Setup
 
-### 📦 Prerequisites
+###  Prerequisites
 
 Ensure the following are installed:
 
@@ -126,7 +126,7 @@ Ensure the following are installed:
 
 ---
 
-## 🪟 Windows Setup
+##  Windows Setup
 
 ```bash
 # Clone the repository
@@ -157,7 +157,7 @@ python app.py
 
 ---
 
-## 🍎 macOS Setup
+##  macOS Setup
 
 ```bash
 # Clone repository
@@ -188,7 +188,7 @@ python3 app.py
 
 ---
 
-## 🐧 Linux (Ubuntu / Arch)
+##  Linux (Ubuntu / Arch)
 
 ### Ubuntu
 
@@ -226,18 +226,18 @@ python3 app.py
 
 ---
 
-## 📌 Future Roadmap
+##  Future Roadmap
 
-* ✋ Multi-hand gesture recognition
-* 🧠 AI-based gesture learning
-* 📷 Depth-based vision support
-* ⚡ GPU acceleration
-* 🧩 Plugin system for VisionIQ
-* 📊 Benchmarking & metrics dashboard
+*  Multi-hand gesture recognition
+*  AI-based gesture learning
+*  Depth-based vision support
+*  GPU acceleration
+*  Plugin system for VisionIQ
+*  Benchmarking & metrics dashboard
 
 ---
 
-## 🧪 Philosophy
+##  Philosophy
 
 > *Computer vision should not be locked behind theory alone.*
 > *It should be interactive, experimental, and grounded in real-world use cases.*
@@ -246,7 +246,7 @@ Open-CV-3 is built with this mindset — learning by building, testing by experi
 
 ---
 
-## 🤝 Contributions
+##  Contributions
 
 Contributions, discussions, and collaborations are welcome.
 
@@ -261,13 +261,13 @@ Feel free to open an issue or reach out.
 
 ---
 
-## 📜 License
+##  License
 
 This project is released under the **MIT License**.
 
 ---
 
-## ⭐ Final Note
+
 
 If you find this repository useful or interesting, consider giving it a ⭐.
 More advanced computer vision projects are on the way.
