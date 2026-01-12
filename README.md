@@ -29,19 +29,15 @@ More projects will be continuously added as this repository grows.
 ```text
 Open-CV-3/
 │
-├── cursor-control/
-│   ├── src/
-│   ├── models/
-│   ├── utils/
-│   ├── main.py
-│   └── README.md
-│
+├── cursor-control
+|
 ├── visioniq/
-│   ├── core/
-│   ├── pipelines/
-│   ├── experiments/
-│   ├── app.py
-│   └── README.md
+│   ├── app/
+│   ├── src/
+│   ├── modes/
+│   ├── README.md
+│   └── Requirements.txt
+|   ├── run.sh
 │
 ├── requirements.txt
 ├── setup.sh
