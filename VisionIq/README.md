@@ -56,6 +56,7 @@ This enables **searchable, explainable, and evidence-based video understanding**
 - Frame-by-frame video processing
 - Temporal awareness (before / after / during)
 - Object-level perception
+- Deepseek R1
 
 ### Semantic Search
 - Text-to-frame similarity search
