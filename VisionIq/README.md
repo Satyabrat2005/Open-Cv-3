@@ -1,4 +1,4 @@
-# 🧠 VisionIQ
+#  VisionIQ
 ### Ask Your Video Anything
 
 > VisionIQ is a local-first video intelligence engine that converts raw video into searchable, explainable, evidence-grounded knowledge.
@@ -13,7 +13,7 @@ This is **video intelligence infrastructure**.
 
 ---
 
-## 🚀 What Is VisionIQ?
+##  What Is VisionIQ?
 
 Video is everywhere — security cameras, meetings, factories, hospitals, research labs.  
 Yet video remains the **least intelligent and least usable form of data**.
@@ -29,7 +29,7 @@ VisionIQ retrieves the exact visual evidence that answers it.
 
 ---
 
-## 🧩 What Can You Ask?
+##  What Can You Ask?
 
 - Where is the bottle in the video?
 - When does the laptop first appear?
@@ -41,7 +41,7 @@ VisionIQ answers using **what the video actually shows** — not assumptions, no
 
 ---
 
-## 🎯 Why VisionIQ Exists
+##  Why VisionIQ Exists
 
 Most AI systems treat video as:
 - static frames
@@ -60,7 +60,7 @@ The result is **searchable, explainable, and auditable video understanding**.
 
 ---
 
-## 🧠 Core Capabilities (V1)
+## Core Capabilities (V1)
 
 ### Video Understanding
 - Frame-by-frame video processing
@@ -85,7 +85,7 @@ The result is **searchable, explainable, and auditable video understanding**.
 
 ---
 
-## 🧠 Advanced Capabilities (Planned)
+##  Advanced Capabilities (Planned)
 
 - LLM-based reasoning over retrieved evidence
 - Natural language answers with traceable explanations
@@ -118,7 +118,7 @@ It reasons only over **filtered, retrieved evidence**.
 
 ---
 
-## 🧰 Technology Stack
+##  Technology Stack
 
 | Layer | Technology |
 |-----|-----------|
@@ -132,7 +132,7 @@ It reasons only over **filtered, retrieved evidence**.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 visioniq/
 ├── src/
@@ -155,7 +155,7 @@ visioniq/
 
 ---
 
-## 💻 Hardware Requirements
+##  Hardware Requirements
 
 Recommended minimum:
 
@@ -168,7 +168,7 @@ Scales cleanly with better hardware.
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 Create virtual environment:
 
@@ -184,7 +184,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🔍 Basic Query Engine (V1)
+##  Basic Query Engine (V1)
 
 VisionIQ already supports **semantic video querying without any LLM**.
 
@@ -197,7 +197,7 @@ Pure vision. Pure semantics. Zero hallucination.
 
 ---
 
-## ▶️ Run the Query Engine
+##  Run the Query Engine
 
 cd src
 python test_query_engine.py
@@ -208,7 +208,7 @@ python test_query_engine.py
 
 ### Output (LLM-Free, Evidence-Only)
 
-💡 VisionIQ Query (type 'exit' to quit)
+ VisionIQ Query (type 'exit' to quit)
 
 ANSWER
 --------------------------------------------------
@@ -230,7 +230,7 @@ Rank 5 | Score: 0.248 | Frame: frame_00007.jpg
 
 ---
 
-## 🧠 VisionIQ Philosophy
+##  VisionIQ Philosophy
 
 AI should not just generate text.  
 It should **understand reality**.
@@ -242,7 +242,7 @@ VisionIQ is built on the principle that:
 
 ---
 
-## 🏢 About NeuroTitan
+##  About NeuroTitan
 
 VisionIQ is developed under **NeuroTitan AI Labs**, a research-driven initiative focused on:
 
@@ -252,8 +252,6 @@ VisionIQ is developed under **NeuroTitan AI Labs**, a research-driven initiative
 - AI–semiconductor co-design
 
 ---
-
-## ⭐ Final Note
 
 VisionIQ is not a demo.  
 It is not a chatbot.  
