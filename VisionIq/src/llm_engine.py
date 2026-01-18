@@ -30,3 +30,12 @@ class LLMEngine:
 
     def _build_prompt(self, query: str, evidence: List[Dict]) -> str:
         if not evidence:
+          return f"""
+You are an AI system that answers questions using visual evidence only.
+
+QUESTION:
+{query}
+
+ANSWER:
+No relevant visual evidence was found in the video.
+"""
