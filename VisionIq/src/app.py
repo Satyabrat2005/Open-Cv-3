@@ -26,3 +26,15 @@ if st.button("Ask") and question:
         "answer": response["answer"],
         "results": response["results"]
     })
+
+for item in st.session_state.chat[::-1]:
+    st.markdown(f"### ❓ {item['question']}")
+    st.markdown(f"**🧠 Answer:** {item['answer']}")
+
+    with st.expander("📷 Visual Evidence"):
+        for r in item["results"]:
+            st.write(
+                f"Frame: {r['frame_id']} | "
+                f"Time: {r['timestamp']}s | "
+                f"Objects: {', '.join(r['objects'])}"
+            )
