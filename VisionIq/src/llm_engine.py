@@ -48,3 +48,18 @@ No relevant visual evidence was found in the video.
             )
 
         return f"""
+You are an AI assistant for video understanding.
+
+RULES:
+- Answer ONLY from the provided visual evidence
+- Do NOT speculate
+- Be concise and factual
+
+VISUAL EVIDENCE:
+{evidence_block}
+
+QUESTION:
+{query}
+
+ANSWER:
+"""
