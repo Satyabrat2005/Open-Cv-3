@@ -7,3 +7,15 @@ app = FastAPI(
     description="Evidence-grounded video intelligence backend",
     version="1.0"
 )
+
+engine = QueryEngine(top_k=5, use_llm=True)
+
+
+class QueryRequest(BaseModel):
+    question: str
+
+
+class QueryResponse(BaseModel):
+    question: str
+    answer: str
+    results: list
