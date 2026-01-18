@@ -14,3 +14,11 @@ evidence = [
         "objects": ["laptop", "backpack"]
     }
 ]
+
+query = "When does the laptop appear?"
+
+answer = engine.generate_answer(query, evidence)
+
+print("\nANSWER")
+print("-" * 40)
+print(answer)
