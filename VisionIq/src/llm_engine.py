@@ -39,3 +39,12 @@ QUESTION:
 ANSWER:
 No relevant visual evidence was found in the video.
 """
+        evidence_block = ""
+        for item in evidence:
+            evidence_block += (
+                f"- Frame {item['frame_id']} "
+                f"(timestamp: {item['timestamp']}s) "
+                f"contains objects: {', '.join(item['objects'])}\n"
+            )
+
+        return f"""
