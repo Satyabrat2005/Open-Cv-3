@@ -1,1 +1,5 @@
-LLMEngine(model="deepseek-r1)
+import subprocess
+from typing import List, Dict
+
+
+class LLMEngine:
