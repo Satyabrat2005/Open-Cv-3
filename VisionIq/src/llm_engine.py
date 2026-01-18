@@ -17,3 +17,11 @@ class LLMEngine:
         result = subprocess.run(
             ["ollama", "run", self.model],
             input=prompt,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+            capture_output=True
+        )
+
+        if result.returncode != 0:
+            return "LLM error: unable to generate answer."
