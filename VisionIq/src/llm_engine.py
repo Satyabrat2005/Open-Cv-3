@@ -25,3 +25,8 @@ class LLMEngine:
 
         if result.returncode != 0:
             return "LLM error: unable to generate answer."
+
+        return result.stdout.strip()
+
+    def _build_prompt(self, query: str, evidence: List[Dict]) -> str:
+        if not evidence:
