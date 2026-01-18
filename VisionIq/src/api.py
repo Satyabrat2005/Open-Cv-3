@@ -19,3 +19,8 @@ class QueryResponse(BaseModel):
     question: str
     answer: str
     results: list
+
+@app.post("/query", response_model=QueryResponse)
+def query_video(request: QueryRequest):
+    response = engine.query(request.question)
+    return response
