@@ -42,3 +42,21 @@ class TimelineEngine:
             }
 
         return summary
+
+    def build_event_sequence(self, results):
+        """
+        Returns ordered list of events:
+        [
+          (timestamp, [objects])
+        ]
+        """
+
+        events = []
+
+        for r in results:
+            events.append((
+                r["meta"].get("timestamp"),
+                r["meta"].get("objects", [])
+            ))
+
+        return sorted(events, key=lambda x: x[0])
