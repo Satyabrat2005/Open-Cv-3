@@ -21,3 +21,14 @@ class TimelineEngine:
           }
         }
         """
+
+        timeline = defaultdict(list)
+
+        for r in results:
+            ts = r["meta"].get("timestamp")
+            objects = r["meta"].get("objects", [])
+
+            for obj in objects:
+                timeline[obj].append(ts)
+
+        summary = {}
