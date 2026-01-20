@@ -32,3 +32,13 @@ class TimelineEngine:
                 timeline[obj].append(ts)
 
         summary = {}
+
+        for obj, times in timeline.items():
+            times = sorted(times)
+            summary[obj] = {
+                "first_seen": times[0],
+                "last_seen": times[-1],
+                "duration": round(times[-1] - times[0], 2)
+            }
+
+        return summary
