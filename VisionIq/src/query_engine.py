@@ -16,6 +16,7 @@ class QueryEngine:
         self.embedder = ClipEmbedder()
         self.db = VectorDatabase()
         self.llm = LLMEngine() if use_llm else None
+        self.timeline = TimelineEngine() 
         self.top_k = top_k
 
         if len(self.db) == 0:
@@ -28,3 +29,9 @@ class QueryEngine:
 
         if not results:
             return self._empty_response(question)
+
+        # Apply symbolic filters
+        filtered = self._apply_object_logic(results, question)
+        filtered = self._apply_temporal_logic(filtered, question)
+
+        evidence = self._build_evidence(filtered)
