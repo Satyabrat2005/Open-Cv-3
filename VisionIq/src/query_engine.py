@@ -1,7 +1,7 @@
 import numpy as np
 from embedder import ClipEmbedder
 from database import VectorDatabase
-
+from timeline_engine import TimelineEngine
 
 class QueryEngine:
     def __init__(self, top_k=5):
