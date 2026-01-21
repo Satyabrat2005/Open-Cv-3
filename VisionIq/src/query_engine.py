@@ -22,3 +22,9 @@ class QueryEngine:
             print(" Vector DB is empty. Index frames first.")
 
     # MAIN QUERY 
+    def query(self, question: str):
+        query_embedding = self.embedder.embed_text(question)
+        results = self.db.search(query_embedding, top_k=self.top_k)
+
+        if not results:
+            return self._empty_response(question)
