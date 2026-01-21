@@ -14,7 +14,7 @@ class QueryEngine:
         self.top_k = top_k
 
         if len(self.db) == 0:
-            print("⚠️ Vector DB is empty. Index frames first.")
+            print(" Vector DB is empty. Index frames first.")
 
     def query(self, question):
         """
