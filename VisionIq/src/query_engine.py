@@ -35,3 +35,14 @@ class QueryEngine:
         filtered = self._apply_temporal_logic(filtered, question)
 
         evidence = self._build_evidence(filtered)
+
+         if self.llm:
+            answer = self.llm.generate_answer(question, evidence)
+        else:
+            answer = self._fallback_answer(filtered)
+
+        return {
+            "question": question,
+            "answer": answer,
+            "results": self._format_results(filtered)
+        }
