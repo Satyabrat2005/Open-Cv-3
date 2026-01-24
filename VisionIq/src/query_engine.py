@@ -85,3 +85,9 @@ class QueryEngine:
             results,
             key=lambda r: r["meta"].get("timestamp", 0)
         )
+
+        if "first" in q:
+            return results[:1]
+
+        if "last" in q:
+            return results[-1:]
