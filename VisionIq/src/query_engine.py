@@ -46,3 +46,16 @@ class QueryEngine:
             "answer": answer,
             "results": self._format_results(filtered)
         }
+
+# ================= LOGIC LAYERS =================
+
+    def _apply_object_logic(self, results, question):
+        q = question.lower()
+
+        # AND logic
+        if " and " in q:
+            objects = [o.strip() for o in q.split(" and ")]
+            return [
+                r for r in results
+                if all(obj in r["meta"].get("objects", []) for obj in objects)
+            ]
