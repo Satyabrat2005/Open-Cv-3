@@ -75,3 +75,13 @@ class QueryEngine:
                 r for r in results
                 if obj not in r["meta"].get("objects", [])
             ]
+
+        return results
+
+    def _apply_temporal_logic(self, results, question):
+        q = question.lower()
+
+        results = sorted(
+            results,
+            key=lambda r: r["meta"].get("timestamp", 0)
+        )
