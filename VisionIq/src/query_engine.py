@@ -59,3 +59,19 @@ class QueryEngine:
                 r for r in results
                 if all(obj in r["meta"].get("objects", []) for obj in objects)
             ]
+
+        # OR logic
+        if " or " in q:
+            objects = [o.strip() for o in q.split(" or ")]
+            return [
+                r for r in results
+                if any(obj in r["meta"].get("objects", []) for obj in objects)
+            ]
+
+        # NOT logic
+        if " without " in q:
+            obj = q.split(" without ")[1].strip()
+            return [
+                r for r in results
+                if obj not in r["meta"].get("objects", [])
+            ]
