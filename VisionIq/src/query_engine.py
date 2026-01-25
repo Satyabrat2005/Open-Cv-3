@@ -47,7 +47,7 @@ class QueryEngine:
             "results": self._format_results(filtered)
         }
 
-# ================= LOGIC LAYERS =================
+# LOGIC LAYERS
 
     def _apply_object_logic(self, results, question):
         q = question.lower()
