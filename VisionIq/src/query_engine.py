@@ -107,3 +107,11 @@ class QueryEngine:
                 r for r in results
                 if r["meta"].get("timestamp", 0) > ref_time
             ]
+
+        return results
+
+    def _find_reference_time(self, results, ref_object):
+        for r in results:
+            if ref_object in r["meta"].get("objects", []):
+                return r["meta"].get("timestamp", 0)
+        return float("inf")
