@@ -41,10 +41,16 @@ class QueryEngine:
         else:
             answer = self._fallback_answer(filtered)
 
+        timeline_summary = self.timeline.build_object_timeline(filtered)
+        event_sequence = self.timeline.build_event_sequence(filtered)
+
+
         return {
             "question": question,
             "answer": answer,
-            "results": self._format_results(filtered)
+            "results": self._format_results(filtered),
+            "timeline": timeline_summary,
+            "events": event_sequence
         }
 
 # LOGIC LAYERS
