@@ -91,3 +91,19 @@ class QueryEngine:
 
         if "last" in q:
             return results[-1:]
+
+        if "before" in q:
+            ref = q.split("before")[-1].strip()
+            ref_time = self._find_reference_time(results, ref)
+            return [
+                r for r in results
+                if r["meta"].get("timestamp", 0) < ref_time
+            ]
+
+        if "after" in q:
+            ref = q.split("after")[-1].strip()
+            ref_time = self._find_reference_time(results, ref)
+            return [
+                r for r in results
+                if r["meta"].get("timestamp", 0) > ref_time
+            ]
