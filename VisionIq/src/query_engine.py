@@ -115,3 +115,37 @@ class QueryEngine:
             if ref_object in r["meta"].get("objects", []):
                 return r["meta"].get("timestamp", 0)
         return float("inf")
+
+    # HELPERS
+
+    def _build_evidence(self, results):
+        return [
+            {
+                "frame_id": r["meta"].get("frame_id"),
+                "timestamp": r["meta"].get("timestamp"),
+                "objects": r["meta"].get("objects", [])
+            }
+            for r in results
+        ]
+
+    def _format_results(self, results):
+        return [
+            {
+                "rank": i + 1,
+                "score": r["score"],
+                "frame_id": r["meta"].get("frame_id"),
+                "timestamp": r["meta"].get("timestamp"),
+                "objects": r["meta"].get("objects", [])
+            }
+            for i, r in enumerate(results)
+        ]
+
+    def _fallback_answer(self, results):
+        return f"{len(results)} relevant frame(s) found."
+
+    def _empty_response(self, question):
+        return {
+            "question": question,
+            "answer": "No relevant visual evidence found.",
+            "results": []
+        }
