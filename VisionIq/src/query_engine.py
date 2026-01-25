@@ -34,16 +34,15 @@ class QueryEngine:
         filtered = self._apply_object_logic(results, question)
         filtered = self._apply_temporal_logic(filtered, question)
 
+        timeline_summary = self.timeline.build_object_timeline(filtered)
+        event_sequence = self.timeline.build_event_sequence(filtered)
+
         evidence = self._build_evidence(filtered)
 
          if self.llm:
             answer = self.llm.generate_answer(question, evidence)
         else:
             answer = self._fallback_answer(filtered)
-
-        timeline_summary = self.timeline.build_object_timeline(filtered)
-        event_sequence = self.timeline.build_event_sequence(filtered)
-
 
         return {
             "question": question,
