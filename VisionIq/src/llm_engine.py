@@ -15,13 +15,14 @@ class LLMEngine:
         prompt = self._build_prompt(query, evidence)
 
         result = subprocess.run(
-            ["ollama", "run", self.model],
-            input=prompt,
-            text=True,
-            encoding="utf-8",
-            errors="ignore",
-            capture_output=True
-        )
+                ["ollama", "run", self.model],
+                input=prompt,
+                text=True,
+                encoding="utf-8",
+                errors="ignore",
+                capture_output=True,
+                timeout=self.timeout
+            )
 
         if result.returncode != 0:
             return "LLM error: unable to generate answer."
