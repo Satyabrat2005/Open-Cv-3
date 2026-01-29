@@ -33,9 +33,14 @@ class ClipEmbedder:
 
         with torch.no_grad():
             embedding = self.model.encode_text(text_tokens)
-
         embedding = embedding / embedding.norm(dim=-1, keepdim=True)
         return embedding.cpu().numpy()[0]
 
     def _embed_pil(self, image: Image.Image):
         image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
+        with torch.no_grad():
+            embedding = self.model.encode_image(image_tensor)
+
+        embedding = embedding / embedding.norm(dim=-1, keepdim=True)
+        return embedding.cpu().numpy()[0]
+
