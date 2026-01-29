@@ -11,3 +11,8 @@ VIDEO_ID = "video_01"
 detector = ObjectDetector()
 embedder = ClipEmbedder()
 db = VectorDatabase()
+
+if len(db) > 0:
+    print("⚠️ Existing index found. Re-indexing will overwrite semantics.")
+    db.index.reset()
+    db.metadata = []
