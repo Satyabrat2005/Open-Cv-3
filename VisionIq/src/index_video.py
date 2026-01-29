@@ -45,3 +45,21 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
         )
 
         objects.extend(clothes)
+
+    #  Generate CLIP embedding for full frame
+    embedding = embedder.embed_image(frame_path)
+
+    #  TIMESTAMP from filename (frame_00005.jpg → 5)
+    try:
+        timestamp = int(frame_file.split("_")[1].split(".")[0])
+    except:
+        timestamp = 0
+
+    #  FINAL METADATA (THIS IS CRITICAL)
+    meta = {
+        "frame_id": frame_file,
+        "frame_path": frame_path,
+        "timestamp": timestamp,
+        "objects": list(set(objects)),
+        "video_id": VIDEO_ID
+    }
