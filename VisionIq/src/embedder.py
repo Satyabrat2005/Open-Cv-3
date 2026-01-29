@@ -59,3 +59,19 @@ class ClipEmbedder:
 
         image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
         text_tokens = clip.tokenize(attributes).to(self.device)
+
+        with torch.no_grad():
+            image_features = self.model.encode_image(image_tensor)
+            text_features = self.model.encode_text(text_tokens)
+
+            image_features /= image_features.norm(dim=-1, keepdim=True)
+            text_features /= text_features.norm(dim=-1, keepdim=True)
+
+            similarity = (image_features @ text_features.T).squeeze(0)
+
+        detected = []
+        for attr, score in zip(attributes, similarity):
+            if score.item() >= threshold:
+                detected.append(attr)
+
+        return detected
