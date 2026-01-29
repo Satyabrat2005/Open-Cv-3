@@ -44,3 +44,18 @@ class ClipEmbedder:
         embedding = embedding / embedding.norm(dim=-1, keepdim=True)
         return embedding.cpu().numpy()[0]
 
+    def detect_attributes(self, image, attributes, threshold=0.25):
+        """
+        Zero-shot attribute detection using CLIP.
+
+        image      : PIL.Image or numpy array
+        attributes : list[str] (e.g. ["clothes", "shirt", "jacket"])
+        threshold  : confidence threshold
+
+        Returns list of detected attributes
+        """
+        if isinstance(image, np.ndarray):
+            image = Image.fromarray(image[:, :, ::-1])  # BGR → RGB
+
+        image_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
+        text_tokens = clip.tokenize(attributes).to(self.device)
