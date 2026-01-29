@@ -63,3 +63,8 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
         "objects": list(set(objects)),
         "video_id": VIDEO_ID
     }
+    db.add(embedding, meta)
+
+# ---------------- SAVE ------------------
+db.save()
+print("✅ Video indexed with object + clothing semantics")
