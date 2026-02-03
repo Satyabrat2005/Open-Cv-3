@@ -12,7 +12,7 @@ class QueryEngine:
     - Multi-object logic (AND / OR / NOT)
     """
     
-    def __init__(self, top_k=10, use_llm=True):
+    def __init__(self, top_k=100, use_llm=True):
         self.embedder = ClipEmbedder()
         self.db = VectorDatabase()
         self.llm = LLMEngine() if use_llm else None
