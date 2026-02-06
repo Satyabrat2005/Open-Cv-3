@@ -1,9 +1,9 @@
 from query_engine import QueryEngine
 
-engine = QueryEngine(top_k=5)
+engine = QueryEngine(top_k=100)
 
 while True:
-    print("\n🧠 VisionIQ Query (type 'exit' to quit)")
+    print("\n🧠 IQryx Query (type 'exit' to quit)")
     question = input(">> ")
 
     if question.lower() in ["exit", "quit"]:
