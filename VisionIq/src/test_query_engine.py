@@ -3,7 +3,7 @@ from query_engine import QueryEngine
 engine = QueryEngine(top_k=100)
 
 while True:
-    print("\n🧠 IQryx Query (type 'exit' to quit)")
+    print("\n IQryx Query (type 'exit' to quit)")
     question = input(">> ")
 
     if question.lower() in ["exit", "quit"]:
@@ -22,4 +22,5 @@ while True:
             f"Rank {r['rank']} | "
             f"Score: {r['score']:.3f} | "
             f"Frame: {r['frame_id']}"
+            f"confidence: {r['conference']}"
         )
