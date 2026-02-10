@@ -7,7 +7,7 @@ frames_dir = "../data/frames/test"
 frames = sorted([f for f in os.listdir(frames_dir) if f.endswith(".jpg")])
 
 if not frames:
-    print("❌ No frames found")
+    print(" No frames found")
     exit()
 
 embedder = ClipEmbedder()
@@ -18,9 +18,9 @@ image_emb = embedder.embed_image(frame_path)
 print("🖼 Image embedding shape:", image_emb.shape)
 
 # Test text embedding
-query = "a laptop on a desk"
+query = "test_query_engine.py"
 text_emb = embedder.embed_text(query)
-print("📝 Text embedding shape:", text_emb.shape)
+print(" Text embedding shape:", text_emb.shape)
 
 # Similarity check
 similarity = np.dot(image_emb, text_emb)
