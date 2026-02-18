@@ -75,3 +75,16 @@ class QueryEngine:
         event_sequence = self.timeline.build_event_sequence(filtered)
 
         evidence = self._build_evidence(filtered)
+
+        if self.llm:
+            answer = self.llm.generate_answer(question, evidence)
+        else:
+            answer = self._fallback_answer(filtered)
+
+        return {
+            "question": question,
+            "answer": answer,
+            "results": self._format_results(filtered),
+            "timeline": timeline_summary,
+            "events": event_sequence
+        }
