@@ -31,4 +31,32 @@ class QueryEngine:
         self.top_k = top_k
 
         if len(self.db) == 0:
-            print("⚠️ Vector DB is empty. Index frames first.")
+            print(" Vector DB is empty. Index frames first.")
+
+    #  MAIN QUERY
+
+    def query(self, question: str):
+        q = question.lower().strip()
+
+        # DEMO MODE
+        for key in DEMO_ANSWERS:
+            if key in q:
+                demo = DEMO_ANSWERS[key]
+
+                results = []
+                for i, frame in enumerate(demo["frames"]):
+                    results.append({
+                        "rank": i + 1,
+                        "score": 0.99,
+                        "frame_id": frame,
+                        "timestamp": 0,
+                        "objects": ["demo"]
+                    })
+
+                return {
+                    "question": question,
+                    "answer": demo["answer"],
+                    "results": results,
+                    "timeline": {},
+                    "events": []
+                }
