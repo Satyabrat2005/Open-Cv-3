@@ -60,3 +60,18 @@ class QueryEngine:
                     "timeline": {},
                     "events": []
                 }
+
+        #  NORMAL PIPELINE
+        query_embedding = self.embedder.embed_text(question)
+        results = self.db.search(query_embedding, top_k=self.top_k)
+
+        if not results:
+            return self._empty_response(question)
+
+        filtered = self._apply_object_logic(results, question)
+        filtered = self._apply_temporal_logic(filtered, question)
+
+        timeline_summary = self.timeline.build_object_timeline(filtered)
+        event_sequence = self.timeline.build_event_sequence(filtered)
+
+        evidence = self._build_evidence(filtered)
