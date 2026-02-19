@@ -115,3 +115,20 @@ class QueryEngine:
             ]
 
         return results
+
+    # TEMPORAL LOGIC 
+
+    def _apply_temporal_logic(self, results, question):
+        q = question.lower()
+
+        results = sorted(
+            results,
+            key=lambda r: r["meta"].get("timestamp", 0)
+        )
+
+        if "first" in q:
+            return results[:1]
+
+        if "last" in q:
+            return results[-1:]
+
