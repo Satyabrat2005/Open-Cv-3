@@ -88,3 +88,14 @@ class QueryEngine:
             "timeline": timeline_summary,
             "events": event_sequence
         }
+    #  OBJECT LOGIC 
+
+    def _apply_object_logic(self, results, question):
+        q = question.lower()
+
+        if " and " in q:
+            objects = [o.strip() for o in q.split(" and ")]
+            return [
+                r for r in results
+                if all(self._object_matches(r["meta"].get("objects", []), obj) for obj in objects)
+            ]
