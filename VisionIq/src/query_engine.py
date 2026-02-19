@@ -99,3 +99,19 @@ class QueryEngine:
                 r for r in results
                 if all(self._object_matches(r["meta"].get("objects", []), obj) for obj in objects)
             ]
+
+        if " or " in q:
+            objects = [o.strip() for o in q.split(" or ")]
+            return [
+                r for r in results
+                if any(self._object_matches(r["meta"].get("objects", []), obj) for obj in objects)
+            ]
+
+        if " without " in q:
+            obj = q.split(" without ")[1].strip()
+            return [
+                r for r in results
+                if not self._object_matches(r["meta"].get("objects", []), obj)
+            ]
+
+        return results
