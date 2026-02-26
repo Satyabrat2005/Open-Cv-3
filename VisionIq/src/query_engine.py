@@ -5,3 +5,29 @@ from timeline_engine import TimelineEngine
 
 
 # SEMANTIC GROUPS 
+
+CLOTHING_CLASSES = {
+    "shirt", "t-shirt", "jacket", "coat",
+    "pants", "jeans", "shorts",
+    "dress", "skirt", "tie"
+}
+
+FOOTWEAR_CLASSES = {
+    "shoe", "sneaker", "boot", "sandal"
+}
+
+ACCESSORY_CLASSES = {
+    "backpack", "handbag", "tie", "belt", "hat"
+}
+
+
+class QueryEngine:
+    """
+    VisionIQ Production Query Engine
+
+    STRICT MODE:
+    - No demo answers
+    - No hallucinations
+    - No speculation
+    - If no visual evidence → no answer
+    """
