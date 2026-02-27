@@ -31,3 +31,15 @@ class QueryEngine:
     - No speculation
     - If no visual evidence → no answer
     """
+
+    def __init__(self, top_k=200, use_llm=True):
+        self.embedder = ClipEmbedder()
+        self.db = VectorDatabase()
+        self.llm = LLMEngine() if use_llm else None
+        self.timeline = TimelineEngine()
+        self.top_k = top_k
+
+        if len(self.db) == 0:
+            print("⚠️ Vector DB is empty. Index frames first.")
+
+    #  MAIN QUERY 
