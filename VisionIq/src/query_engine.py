@@ -61,3 +61,27 @@ class QueryEngine:
 
         if not filtered:
             return self._empty_response(question)
+
+        # 4️⃣ Build timeline
+        timeline_summary = self.timeline.build_object_timeline(filtered)
+        event_sequence = self.timeline.build_event_sequence(filtered)
+
+        # 5️⃣ Build evidence
+        evidence = self._build_evidence(filtered)
+
+        if not evidence:
+            return self._empty_response(question)
+
+        # 6️⃣ Generate grounded answer
+        if self.llm:
+            answer = self.llm.generate_answer(question, evidence)
+        else:
+            answer = self._fallback_answer(filtered)
+
+        return {
+            "question": question,
+            "answer": answer,
+            "results": self._format_results(filtered),
+            "timeline": timeline_summary,
+            "events": event_sequence
+        }
