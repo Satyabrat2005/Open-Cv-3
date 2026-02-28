@@ -126,3 +126,27 @@ class QueryEngine:
             return any(o in ACCESSORY_CLASSES for o in detected_objects)
 
         return query_object in detected_objects
+
+    # TEMPORAL LOGIC 
+
+    def _apply_temporal_logic(self, results, question):
+        q = question.lower()
+
+        results = sorted(
+            results,
+            key=lambda r: r["meta"].get("timestamp", 0)
+        )
+
+        if "first" in q:
+            return results[:1]
+
+        if "last" in q:
+            return results[-1:]
+
+        if "before" in q:
+            ref = q.split("before")[-1].strip()
+            ref_time = self._find_reference_time(results, ref)
+            return [
+                r for r in results
+                if r["meta"].get("timestamp", 0) < ref_time
+            ]
