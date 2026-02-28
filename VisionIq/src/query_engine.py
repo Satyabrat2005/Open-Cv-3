@@ -111,3 +111,18 @@ class QueryEngine:
                 r for r in results
                 if not self._object_matches(r["meta"].get("objects", []), obj)
             ]
+
+        return results
+
+    def _object_matches(self, detected_objects, query_object):
+
+        if query_object == "clothes":
+            return any(o in CLOTHING_CLASSES for o in detected_objects)
+
+        if query_object == "footwear":
+            return any(o in FOOTWEAR_CLASSES for o in detected_objects)
+
+        if query_object == "accessories":
+            return any(o in ACCESSORY_CLASSES for o in detected_objects)
+
+        return query_object in detected_objects
