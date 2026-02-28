@@ -62,17 +62,17 @@ class QueryEngine:
         if not filtered:
             return self._empty_response(question)
 
-        # 4️⃣ Build timeline
+        #  Build timeline
         timeline_summary = self.timeline.build_object_timeline(filtered)
         event_sequence = self.timeline.build_event_sequence(filtered)
 
-        # 5️⃣ Build evidence
+        #  Build evidence
         evidence = self._build_evidence(filtered)
 
         if not evidence:
             return self._empty_response(question)
 
-        # 6️⃣ Generate grounded answer
+        #  Generate grounded answer
         if self.llm:
             answer = self.llm.generate_answer(question, evidence)
         else:
@@ -85,3 +85,29 @@ class QueryEngine:
             "timeline": timeline_summary,
             "events": event_sequence
         }
+
+    # OBJECT LOGIC
+
+    def _apply_object_logic(self, results, question):
+        q = question.lower()
+
+        if " and " in q:
+            objects = [o.strip() for o in q.split(" and ")]
+            return [
+                r for r in results
+                if all(self._object_matches(r["meta"].get("objects", []), obj) for obj in objects)
+            ]
+
+        if " or " in q:
+            objects = [o.strip() for o in q.split(" or ")]
+            return [
+                r for r in results
+                if any(self._object_matches(r["meta"].get("objects", []), obj) for obj in objects)
+            ]
+
+        if " without " in q:
+            obj = q.split(" without ")[1].strip()
+            return [
+                r for r in results
+                if not self._object_matches(r["meta"].get("objects", []), obj)
+            ]
