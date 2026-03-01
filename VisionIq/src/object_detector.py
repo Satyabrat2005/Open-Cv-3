@@ -1,4 +1,5 @@
 from ultralytics import YOLO  
+import cv2
 
 class ObjectDetector:
     def __init__(self, model_path="yolov8n.pt", conf=0.15):
