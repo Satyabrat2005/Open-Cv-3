@@ -32,3 +32,18 @@ class ObjectDetector:
 
         # remove duplicates
         return list(set(objects))
+
+    def detect_person_regions(self, frame_path):
+        """
+        Detects bounding boxes for persons in the frame
+        Returns list of cropped person images (numpy arrays)
+        """
+        results = self.model.predict(
+            frame_path,
+            conf=self.conf,
+            verbose=False
+        )
+
+        image = cv2.imread(frame_path)
+        if image is None:
+            return []
