@@ -26,13 +26,9 @@ class ObjectDetector:
             if r.boxes is None:
                 continue
 
-        for box in r.boxes:
-                label = self.model.names[int(box.cls[0])]
-                confidence = float(box.conf[0])
+            for box in r.boxes:
+                    label = self.model.names[int(box.cls[0])]
+                    objects.append(label)
 
-                objects.append({
-                    "label": label,
-                    "confidence": confidence
-                })
-
-        return objects
+        # remove duplicates
+        return list(set(objects))
