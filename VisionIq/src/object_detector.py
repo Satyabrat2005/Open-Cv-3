@@ -47,3 +47,20 @@ class ObjectDetector:
         image = cv2.imread(frame_path)
         if image is None:
             return []
+
+        person_crops = []
+
+        for r in results:
+            if r.boxes is None:
+                continue
+
+            for box in r.boxes:
+                label = self.model.names[int(box.cls[0])]
+                if label == "person":
+                    x1, y1, x2, y2 = map(int, box.xyxy[0])
+                    crop = image[y1:y2, x1:x2]
+
+                    if crop.size > 0:
+                        person_crops.append(crop)
+
+        return person_crops
