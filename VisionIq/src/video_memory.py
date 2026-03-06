@@ -25,3 +25,11 @@ class VideoMemoryEngine:
         object_timeline = defaultdict(list)
 
         text_appearances = defaultdict(list)
+
+        first_appearance = {}
+        last_appearance = {}
+
+        for meta in self.db.metadata:
+
+            frame_id = meta.get("frame_id")
+            timestamp = meta.get("timestamp", 0)
