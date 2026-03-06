@@ -20,3 +20,8 @@ class VideoMemoryEngine:
         print(" Building video memory...")
 
         total_frames = len(self.db.metadata)
+
+        object_frequency = defaultdict(int)
+        object_timeline = defaultdict(list)
+
+        text_appearances = defaultdict(list)
