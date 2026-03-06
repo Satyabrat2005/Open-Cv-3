@@ -14,3 +14,9 @@ class VideoMemoryEngine:
     def __init__(self, db, memory_path="../data/video_memory.pkl"):
         self.db = db
         self.memory_path = memory_path
+
+    def build_memory(self):
+
+        print(" Building video memory...")
+
+        total_frames = len(self.db.metadata)
