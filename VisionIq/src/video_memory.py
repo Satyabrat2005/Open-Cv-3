@@ -10,3 +10,7 @@ class VideoMemoryEngine:
 
     This is executed AFTER indexing.
     """
+    
+    def __init__(self, db, memory_path="../data/video_memory.pkl"):
+        self.db = db
+        self.memory_path = memory_path
