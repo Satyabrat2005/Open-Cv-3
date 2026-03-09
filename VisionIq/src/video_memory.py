@@ -70,7 +70,7 @@ memory = {
 
         return memory
 
-# ---------------- SAVE ----------------
+# SAVE
 
     def _save(self, memory):
 
@@ -78,3 +78,13 @@ memory = {
 
         with open(self.memory_path, "wb") as f:
             pickle.dump(memory, f)
+
+  #LOAD 
+
+    def load_memory(self):
+
+        if not os.path.exists(self.memory_path):
+            return None
+
+        with open(self.memory_path, "rb") as f:
+            return pickle.load(f)
