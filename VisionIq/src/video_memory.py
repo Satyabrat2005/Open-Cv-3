@@ -45,3 +45,9 @@ for obj in meta.get("objects", []):
 first_appearance[obj] = timestamp
 
                 last_appearance[obj] = timestamp
+
+# OCR MEMORY
+            text = meta.get("ocr_text", "").strip().lower()
+
+            if text:
+                text_appearances[text].append(timestamp)
