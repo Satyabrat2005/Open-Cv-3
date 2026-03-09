@@ -69,3 +69,12 @@ memory = {
         print(f"Unique objects: {len(memory['unique_objects'])}")
 
         return memory
+
+# ---------------- SAVE ----------------
+
+    def _save(self, memory):
+
+        os.makedirs(os.path.dirname(self.memory_path), exist_ok=True)
+
+        with open(self.memory_path, "wb") as f:
+            pickle.dump(memory, f)
