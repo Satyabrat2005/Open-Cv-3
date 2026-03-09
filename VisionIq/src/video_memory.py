@@ -51,3 +51,13 @@ first_appearance[obj] = timestamp
 
             if text:
                 text_appearances[text].append(timestamp)
+
+memory = {
+            "total_frames": total_frames,
+            "unique_objects": list(object_frequency.keys()),
+            "object_frequency": dict(object_frequency),
+            "object_timeline": dict(object_timeline),
+            "text_appearances": dict(text_appearances),
+            "first_appearance": first_appearance,
+            "last_appearance": last_appearance
+        }
