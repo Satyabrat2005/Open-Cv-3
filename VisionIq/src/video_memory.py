@@ -33,3 +33,11 @@ class VideoMemoryEngine:
 
             frame_id = meta.get("frame_id")
             timestamp = meta.get("timestamp", 0)
+
+# OBJECT MEMORY
+for obj in meta.get("objects", []):
+
+                object_frequency[obj] += 1
+                object_timeline[obj].append(timestamp)
+
+                if obj not in first_appearance:
