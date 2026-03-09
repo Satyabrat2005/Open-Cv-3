@@ -61,3 +61,11 @@ memory = {
             "first_appearance": first_appearance,
             "last_appearance": last_appearance
         }
+
+        self._save(memory)
+
+        print("Video memory built")
+        print(f"Total frames: {total_frames}")
+        print(f"Unique objects: {len(memory['unique_objects'])}")
+
+        return memory
