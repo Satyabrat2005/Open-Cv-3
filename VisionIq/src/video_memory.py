@@ -41,3 +41,7 @@ for obj in meta.get("objects", []):
                 object_timeline[obj].append(timestamp)
 
                 if obj not in first_appearance:
+
+first_appearance[obj] = timestamp
+
+                last_appearance[obj] = timestamp
