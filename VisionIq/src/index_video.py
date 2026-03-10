@@ -20,3 +20,13 @@ detector = ObjectDetector()
 embedder = ClipEmbedder()
 ocr = OCREngine()
 db = VectorDatabase()
+
+#RESET INDEX IF EXISTS
+
+if len(db) > 0:
+    print(" Existing index detected. Rebuilding index...")
+    db.index.reset()
+    db.metadata = []
+
+
+print(" Starting VisionIQ video indexing...")
