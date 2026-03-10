@@ -56,3 +56,27 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
 
     # PERSON REGIONS
     person_boxes = detector.detect_person_regions(frame_path)
+
+# CLOTHING SEMANTICS
+    for box in person_boxes:
+
+        x1, y1, x2, y2 = map(int, box)
+        crop = frame[y1:y2, x1:x2]
+
+        if crop.size == 0:
+            continue
+
+        clothes = embedder.detect_attributes(
+            crop,
+            [
+                "clothes",
+                "shirt",
+                "jacket",
+                "pants",
+                "t-shirt",
+                "hoodie",
+                "dress"
+            ]
+        )
+
+        objects.extend(clothes)
