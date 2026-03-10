@@ -39,3 +39,14 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
 
     if not frame_file.endswith(".jpg"):
         continue
+
+        frame_path = os.path.join(FRAMES_DIR, frame_file)
+    frame_count += 1
+
+    print(f"🔍 Processing frame {frame_file}")
+
+    # ---------------- LOAD FRAME ----------------
+    frame = cv2.imread(frame_path)
+
+    if frame is None:
+        continue
