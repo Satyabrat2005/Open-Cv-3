@@ -30,3 +30,12 @@ if len(db) > 0:
 
 
 print(" Starting VisionIQ video indexing...")
+
+# INDEX FRAMES
+
+frame_count = 0
+
+for frame_file in sorted(os.listdir(FRAMES_DIR)):
+
+    if not frame_file.endswith(".jpg"):
+        continue
