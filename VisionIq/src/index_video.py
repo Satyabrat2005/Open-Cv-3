@@ -7,3 +7,16 @@ from embedder import ClipEmbedder
 from database import VectorDatabase
 from video_memory import VideoMemoryEngine
 from ocr_engine import OCREngine
+
+# CONFIG 
+
+FRAMES_DIR = "../data/frames/test"
+VIDEO_ID = "video_01"
+
+
+# INIT 
+
+detector = ObjectDetector()
+embedder = ClipEmbedder()
+ocr = OCREngine()
+db = VectorDatabase()
