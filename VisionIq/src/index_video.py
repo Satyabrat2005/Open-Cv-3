@@ -80,3 +80,15 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
         )
 
         objects.extend(clothes)
+
+# OCR TEXT
+    ocr_text = ocr.extract_text(frame_path)
+
+    #CLIP EMBEDDING
+    embedding = embedder.embed_image(frame_path)
+
+    #TIMESTAMP
+    try:
+        timestamp = int(frame_file.split("_")[1].split(".")[0])
+    except:
+        timestamp = frame_count
