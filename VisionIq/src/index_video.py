@@ -45,8 +45,14 @@ for frame_file in sorted(os.listdir(FRAMES_DIR)):
 
     print(f"🔍 Processing frame {frame_file}")
 
-    # ---------------- LOAD FRAME ----------------
+    # LOAD FRAME
     frame = cv2.imread(frame_path)
 
     if frame is None:
         continue
+
+#OBJECT DETECTION 
+    objects = detector.detect_objects(frame_path)
+
+    # PERSON REGIONS
+    person_boxes = detector.detect_person_regions(frame_path)
